@@ -1,0 +1,59 @@
+<div class="flex flex-col items-center justify-center w-full h-full">
+    <div class="w-full max-w-3xl">
+        <div class="max-w-none mx-auto prose prose-sm">
+            <img
+                class="w-20"
+                src="assets/images/logo/logo.svg"
+                alt="Logo image">
+            <h1>Landing Module</h1>
+            <p>
+                This can be the landing or the welcome page of your application. If you have an SSR (Server Side Rendering) setup, or if you don't need to have Search engine
+                visibility and optimizations, you can even use this page as your primary landing page.
+            </p>
+            <p>
+                This is a separate "module", it has its own directory and routing setup and also it's completely separated from the actual application. This is also a simple example of
+                a multiple applications setup that uses the same codebase. You can have different entry points and essentially have different applications within the same codebase.
+            </p>
+        </div>
+
+        <div class="flex items-baseline mt-2 font-medium pb-5">
+            <div>Já tem uma chave pública ?</div>
+            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Sign up
+            </a>
+        </div>
+        <div class="flex mt-5">
+
+            <form class="w-full" [formGroup]="signatureForm">
+                 <!-- Email field -->
+                 <mat-form-field class="w-full">
+                    <mat-label>E-mail</mat-label>
+                    <input id="email" matInput [formControlName]="'email'" />
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                    <mat-error *ngIf="signatureForm.get('email').hasError('required')">
+                        Email é obrigatório
+                    </mat-error>
+                    <mat-error *ngIf="signatureForm.get('email').hasError('email')">
+                        Por favor digite um e-mail válido
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>API KEY</mat-label>
+                    <input id="apikey" matInput [formControlName]="'apikey'" disabled />
+                    <mat-icon class="icon-size-5" matPrefix  [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                </mat-form-field>
+
+                 <!-- Submit button -->
+                 <button class="fuse-mat-button-medium w-50 mt-6" mat-flat-button [color]="'primary'"
+                 [disabled]="signatureForm.invalid"  (click)="obterKey()">
+                 <span *ngIf="!signatureForm.invalid">
+                     Obter chave pública
+                 </span>
+                 <mat-progress-spinner class="ml-2 mr-3" *ngIf="loading" [diameter]="24"
+                     [mode]="'indeterminate'"></mat-progress-spinner>
+             </button>
+            </form>
+        
+        </div>
+    </div>
+</div>
