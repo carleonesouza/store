@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Produto } from 'app/models/produto.model';
 import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, switchMap, tap, take, map, filter } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,9 @@ export class ProductsService {
 
   private _products: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   private _product: BehaviorSubject<any | null> = new BehaviorSubject(null);
+
+  private _categories: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
+  private _category: BehaviorSubject<any | null> = new BehaviorSubject(null);
 
   constructor(private _httpClient: HttpClient, private error: HandleError, public _snackBar: MatSnackBar) { }
 
@@ -25,15 +30,23 @@ export class ProductsService {
     return this._product.asObservable();
   }
 
+  get categories$(): Observable<any[]> {
+    return this._categories.asObservable();
+  }
+
+  get category$(): Observable<any> {
+    return this._category.asObservable();
+  }
+
 
   getAllProducts(page = 0, size = 10) {
-    return this._httpClient.get<any[]>(environment.apiManager + 'produtos/busca-produto', {params:{
+    return this._httpClient.get<any[]>(environment.apiManager + 'products', {params:{
       page, size
     }})
       .pipe(
         tap((result) => {
-          let produtos = result['content'];
-          produtos = produtos.sort((a, b) => a?.prodDescricao.localeCompare(b?.prodDescricao));
+          let produtos = result;
+          produtos = produtos.sort((a, b) => a?.name.localeCompare(b?.name));
           this._products.next(produtos);
         }),
         catchError(this.error.handleError<any[]>('getAllProducts'))
@@ -42,7 +55,7 @@ export class ProductsService {
 
 
   getProductById(id): Observable<any> {
-      return this._httpClient.get<any>(environment.apiManager + 'produtos/busca-produto', {params: {id}})
+      return this._httpClient.get<any>(environment.apiManager + 'products/'+id)
       .pipe(
         tap((result) => {
           this._product.next(result);
@@ -51,15 +64,28 @@ export class ProductsService {
       );
   }
 
-  editProduct(product): Observable<any> {
+
+  getCategories(){
+    return this._httpClient.get<any[]>(environment.apiManager + 'categories')
+      .pipe(
+        tap((result) => {
+          let categories = result;
+          categories = categories.sort((a, b) => a?.name.localeCompare(b?.name));
+          this._categories.next(categories);
+        }),
+        catchError(this.error.handleError<any[]>('getAllCateroies'))
+      );
+  }
+
+  editProduct(product: Produto): Observable<any> {
     return this.products$.pipe(
       take(1),
-      switchMap(products => this._httpClient.patch<any>(environment.apiManager + 'edit-product', product)
+      switchMap(products => this._httpClient.put<any>(environment.apiManager + 'products/'+product.id, product)
         .pipe(
           map((updatedProduct) => {
 
             // Find the index of the updated product
-            const index = products.findIndex(item => item.recId === product.recId);
+            const index = products.findIndex(item => item.id === product.id);
 
             // Update the product
             products[index] = updatedProduct;
@@ -72,7 +98,7 @@ export class ProductsService {
           }),
           switchMap(updatedProduct => this.product$.pipe(
             take(1),
-            filter(item => item && item.recId === product.recId),
+            filter(item => item && item.recId === product.id),
             tap(() => {
               // Update the product if it's selected
               this._product.next(updatedProduct);
@@ -104,10 +130,18 @@ export class ProductsService {
   }
 
   addProduct(product): Observable<any> {
-    return this._httpClient.post(environment.apiManager + 'produtos/add-produto', product)
+    return this._httpClient.post(environment.apiManager + 'products', product)
       .pipe(
         tap(result => this._product.next(result)),
         catchError(this.error.handleError<any>('addProduct'))
+      );
+  }
+
+  deleteProduct(product: Produto): Observable<any> {
+    return this._httpClient.delete(environment.apiManager + 'products/'+product.id)
+      .pipe(
+        tap(result => this._product.next(result)),
+        catchError(this.error.handleError<any>('deleteProduct'))
       );
   }
 

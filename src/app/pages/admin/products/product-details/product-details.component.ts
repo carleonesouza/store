@@ -11,6 +11,7 @@ import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProductsService } from '../products.service';
+import { Categoria } from 'app/models/categoria';
 
 @Component({
   selector: 'app-product-details',
@@ -27,10 +28,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   user: any;
   creating: boolean = false;
   loading: boolean = false;
+  isLoadingCategories: boolean = false;
+  categories$: Observable<Categoria[]>;
   hide = true;
   product$: Observable<any>;
   contratcts$: Observable<any[]>;
-  product: any;
+  product: Produto;
   saving: boolean;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -41,7 +44,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     private _productsService: ProductsService,
     private _route: ActivatedRoute,
     public _dialog: DialogMessage,
-    private _router: Router) { }
+    private _router: Router) {
+
+      this.categories$ = this._productsService.getCategories();
+    }
 
   ngOnInit(): void {
     // Open the drawer
@@ -62,7 +68,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
       this._productsService.product$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((product: any) => {
+        .subscribe((product: Produto) => {
 
           // Open the drawer in case it is closed
           this._listItemsComponent.matDrawer.open();
@@ -70,7 +76,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
           this.productForm.reset();
 
           // Get the Lista
-          this.product = product['content'][0];
+          this.product = product;
 
           if (this.product) {
             this.productForm.patchValue(this.product);
@@ -98,8 +104,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   createProductForm() {
     this.productForm = this._formBuilder.group({
-      recId: new FormControl(''),
-      prodDescricao: new FormControl('', Validators.required),
+      id: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.required),
+      quantity: new FormControl('', Validators.required),
+      volume: new FormControl('', Validators.required),
+      category: new FormControl('', Validators.required),
+      classification: new FormControl('', Validators.required),
+      status: new FormControl(true)
     });
   }
 
@@ -114,6 +127,14 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   compareFn(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.roleName === c2 : c2 === c1.roleName;
+  }
+
+  compareCategories(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
+  itemDisplayFn(item: Categoria) {
+    return item ? item.name : '';
   }
 
   /**
@@ -167,14 +188,14 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   desativaProduto(event) {
-    const ativaDesativa = this.product.ativo === true ? 'Inativar' : 'Ativar';
+    const ativaDesativa = this.product.status === true ? 'Inativar' : 'Ativar';
     const dialogRef = this._dialog.showDialog(`${ativaDesativa} Produto`, `Certeza que deseja ${ativaDesativa} Produto?`,
       this.product, event?.checked);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const produto = new Produto(result?.item);
-        produto.ativo = produto.ativo === true ? false : true;
+        produto.status = produto.status === true ? false : true;
         this._productsService.deactivateActiveProduct(produto)
           .subscribe(
             () => {
@@ -190,7 +211,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.productForm.valid) {
       const product = new Produto(this.productForm.value);
-      delete product.recId;
+      delete product.id;
       this.saving = true;
       this.closeDrawer().then(() => true);
       this._productsService
@@ -201,7 +222,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
             this.saving = false;
             this.toggleEditMode(false);
             this.closeDrawer().then(() => true);
-            this._router.navigate(['/admin/produto/lista']);
+            this._router.navigate(['/admin/produtos/lista']);
             this._snackBar.open('Produto Salvo com Sucesso');
             this.productForm.reset();
           });

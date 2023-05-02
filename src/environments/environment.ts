@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     apiCad:'https://homolog-evo.eusaude.com.br/cad/api/',
     apiList: 'https://homolog-evo.eusaude.com.br/listas/api/',
-    apiManager: 'http://localhost:8080/v1/api/'
+    apiManager: 'https://app-loja.azurewebsites.net/v1/api/'
 };
 
 /*

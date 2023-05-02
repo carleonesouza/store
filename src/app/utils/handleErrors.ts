@@ -18,33 +18,33 @@ export class HandleError {
       let errorMenssage = { message: 'Ocorreu um erro desconhecido!', status: 500, operation: operation };
 
       if (handle.status >= 500 && handle.status <= 599) {
-        errorMenssage = { message: handle.error.mensagem, status: handle.status, operation: operation };
+        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
         console.log(errorMenssage);
 
         this.router.navigate(['error-500']);
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
           data: {
-            title: 'Ocorreu um erro!', message: handle.error.mensagem,
+            title: 'Ocorreu um erro!', message: handle.error,
             confirm: false, recId: operation, status: handle.status
           },
         });
         return throwError(errorMenssage);
       }
       if (handle.status === 400 || handle.status === 404) {
-        errorMenssage = { message: handle.error.mensagem, status: handle.status, operation: operation };
+        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
         console.log(errorMenssage);
 
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
           data: {
-            title: 'Ocorreu um erro!', message: handle.error.mensagem,
+            title: 'Ocorreu um erro!', message: handle.error,
             confirm: false, recId: operation, status: handle.status
           },
         });
         return throwError(errorMenssage);
       } else if (handle.status === 401 || handle.status === 404) {
-        errorMenssage = { message: handle.error.mensagem, status: handle.status, operation: operation };
+        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
         console.log(errorMenssage);
         this.router.navigate(['401-unauthorized']);
 
@@ -57,12 +57,12 @@ export class HandleError {
         });
         return throwError(errorMenssage);
       } else {
-        errorMenssage = { message: handle.error.mensagem, status: handle.status, operation: operation };
+        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
 
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
           data: {
-            title: 'Ocorreu um erro!', message: handle.error.mensagem,
+            title: 'Ocorreu um erro!', message: handle.error,
             confirm: false, recId: operation, status: handle.status
           },
         });

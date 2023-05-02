@@ -3,16 +3,16 @@ import { Router } from '@angular/router';
 import { FuseVerticalNavigationAppearance, FuseVerticalNavigationMode, FuseNavigationItem, FuseVerticalNavigationPosition,
     FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { AuthService } from 'app/core/auth/auth.service';
-import { User } from 'app/models/user';
 import { Subject } from 'rxjs';
 import { PagesService } from './pages.service';
 import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
     selector: 'app-page',
     templateUrl: './page.component.html',
 })
-export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageComponent implements OnInit, OnDestroy {
 
     @Input() appearance: FuseVerticalNavigationAppearance;
     @Input() autoCollapse: boolean;
@@ -23,7 +23,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() isScreenSmall: boolean;
     @Input() position: FuseVerticalNavigationPosition;
     @Input() transparentOverlay: boolean;
-    user: any;
+    user: User;
     private navigationData: FuseNavigationItem[] = [
         {
             id: 'home',
@@ -246,7 +246,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    private isAuth = false;
+    private isAuth!: boolean;
 
 
     /**
@@ -276,20 +276,15 @@ export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     ngOnInit() {
 
-
-
-    }
-
-    ngAfterViewInit() {
         if (this._authService.check()) {
             this.isAuth = true;
             this._userService.user$.subscribe((user)=> {
                 this.user = user;
-                console.log(user);
             });
         } else {
             this._authService.signOut();
         }
+
     }
 
     /**

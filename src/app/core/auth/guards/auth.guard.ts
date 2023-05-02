@@ -45,6 +45,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
                 // role not authorised so redirect to home page
                 this._router.navigate(['401-unauthorized']);
+                this._authService.signOut();
                 return false;
             }
 
@@ -88,6 +89,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
                     if (!authenticated) {
                         // Redirect to the sign-in page
                         this._router.navigate(['sign-in']);
+                        this._authService.signOut();
 
                         // Prevent the access
                         return of(false);
