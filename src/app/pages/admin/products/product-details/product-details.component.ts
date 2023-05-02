@@ -104,7 +104,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   createProductForm() {
     this.productForm = this._formBuilder.group({
-      id: new FormControl(''),
+      _id: new FormControl(''),
       name: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),

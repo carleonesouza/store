@@ -27,7 +27,7 @@ export class PageComponent implements OnInit, OnDestroy {
     private navigationData: FuseNavigationItem[] = [
         {
             id: 'home',
-            title: 'Home',
+            title: 'Início',
             type: 'basic',
             icon: 'heroicons_outline:home',
             link: '/inicio'
@@ -39,13 +39,29 @@ export class PageComponent implements OnInit, OnDestroy {
             icon: 'heroicons_outline:heart',
             link: '/pacientes'
         },
-        // {
-        //     id: 'prescricao',
-        //     title: 'Prescrição',
-        //     type: 'basic',
-        //     icon: 'mat_solid:medication',
-        //     link: '/prescricao'
-        // },
+        {
+            id: 'loja',
+            title: 'Loja',
+            type: 'collapsable',
+            icon: 'heroicons_outline:shopping-bag',
+            link: '/loja',
+            children: [
+                {
+                    id: 'Caixa',
+                    title: 'Gestão do Caixa',
+                    subtitle: '',
+                    type: 'basic',
+                    icon: 'mat_solid:account_balance_wallet'
+                },
+                {
+                    id: 'Vendas',
+                    title: 'Gestão de Vendas',
+                    subtitle: '',
+                    type: 'basic',
+                    icon: 'mat_solid:add_shopping_cart'
+                }
+            ]
+        },
         {
             id: 'admin',
             title: 'Administrativo',
