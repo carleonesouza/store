@@ -24,6 +24,9 @@ export const pagesRoutes: Route[] = [
                 children: [
                     {
                         path:'', loadChildren: () => import('app/pages/admin/admin.module').then(admin => admin.AdminModule),
+                    },
+                    {
+                        path:'', loadChildren: () => import('app/pages/store/store.module').then(store => store.StoreModule),
                     }
                 ]
             },

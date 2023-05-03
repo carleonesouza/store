@@ -38,6 +38,7 @@
         "apexcharts": "3.32.1",
         "crypto-js": "3.3.0",
         "highlight.js": "11.3.1",
+        "keen-slider": "^6.8.5",
         "keycloak-angular": "^8.4.0",
         "keycloak-js": "^15.0.2",
         "lodash-es": "4.17.21",

@@ -47,18 +47,20 @@ export class PageComponent implements OnInit, OnDestroy {
             link: '/loja',
             children: [
                 {
-                    id: 'Caixa',
-                    title: 'Gestão do Caixa',
-                    subtitle: '',
+                    id: 'caixa',
+                    title: ' Caixa',
+                    subtitle: 'Gestão do Caixa',
                     type: 'basic',
-                    icon: 'mat_solid:account_balance_wallet'
+                    icon: 'mat_solid:account_balance_wallet',
+                    link: 'loja/caixa'
                 },
                 {
-                    id: 'Vendas',
-                    title: 'Gestão de Vendas',
-                    subtitle: '',
+                    id: 'vendas',
+                    title: 'Vendas',
+                    subtitle: 'Gestão de Vendas',
                     type: 'basic',
-                    icon: 'mat_solid:add_shopping_cart'
+                    icon: 'mat_solid:add_shopping_cart',
+                    link: 'loja/vendas'
                 }
             ]
         },

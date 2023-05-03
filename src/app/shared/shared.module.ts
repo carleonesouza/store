@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LogoComponent } from './logo-component/logo.component';
@@ -23,6 +23,18 @@ import { AddIdentificadorComponent } from './add-identificador/add-identificador
 import { DialogAssociateComponent } from './dialog-association/dialog-associate.component';
 import { MatSnackBarComponent } from './mat-snack-bar/mat-snack-bar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+
+export const customCurrencyMaskConfig: CurrencyMaskConfig = {
+    align: 'right',
+    allowNegative: true,
+    decimal: ',',
+    precision: 2,
+    prefix: 'R$ ',
+    suffix: '',
+    thousands: '.'
+  };
 
 @NgModule({
     imports: [
@@ -45,7 +57,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         FuseAlertModule,
         FuseCardModule,
         FormsModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        CurrencyMaskModule
     ],
     exports: [
         CommonModule,
@@ -76,6 +89,21 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         DialogAssociateComponent,
         MatSnackBarComponent,
         //IndividuoProgramaSaudeComponent
+    ],
+    providers:[
+        { provide: MAT_DATE_LOCALE, useValue: 'pt-br' },{
+            provide: MAT_DATE_FORMATS,
+            useValue: {
+              display: {
+                dateInput: 'DD/MM/YYYY',
+                monthYearLabel: 'MMM YYYY',
+                dateA11yLabel: 'LL',
+                monthYearA11yLabel: 'MMMM YYYY',
+              }
+            }
+          },
+        CurrencyPipe,
+  { provide: CURRENCY_MASK_CONFIG, useValue: customCurrencyMaskConfig }
     ]
 })
 export class SharedModule
