@@ -4,8 +4,8 @@ import { Usuario } from './usuario';
 export class Venda {
 
     _id: string;
-    produto: Produto;
-    quantidade: number;
+    produtos: Array<Produto>;
+    nvenda: number;
     total: number;
     formaPagamnto: string;
     troco?: number;
