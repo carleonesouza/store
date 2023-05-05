@@ -11,7 +11,6 @@ import { Produto } from 'app/models/produto.model';
 import { Venda } from 'app/models/vendas';
 import { ProductsService } from 'app/pages/admin/products/products.service';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
-import { random } from 'lodash';
 import { Observable, map, startWith } from 'rxjs';
 
 @Component({
@@ -48,11 +47,11 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.vendaForm.get('valorPago').valueChanges.subscribe((value) =>{
       if(this.selectedProducts.length > 0){
-        this.vendaForm.get('troco').patchValue(this._calcVendaTroco(this.selectedProducts, value));
+        this.vendaForm.get('troco').setValue(this._calcVendaTroco(this.selectedProducts, value));
       }
     });
 
-    this.vendaForm.get('nvenda').setValue('NV' + Math.floor(100000 + Math.random() * 900000));
+    this.vendaForm.get('nvenda').setValue(Math.floor(100000 + Math.random() * 900000));
 
   }
 
@@ -144,7 +143,6 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.venda = new Venda(formGroup.value);
     this.venda.formaPagamnto = this.formas[0];
-    console.log(this.formas);
   }
 
   fecharVenda() {

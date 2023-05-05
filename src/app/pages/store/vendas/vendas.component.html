@@ -25,7 +25,8 @@
 
         </div>
     </div>
-    <mat-stepper [linear]="isLinear" orientation="vertical" #stepper class="rounded bg-transparent" [formGroup]="vendaForm">
+    <mat-stepper [linear]="isLinear" orientation="vertical" #stepper class="rounded bg-transparent"
+        [formGroup]="vendaForm">
         <mat-step [stepControl]="vendaForm" class="p-4">
 
             <ng-template matStepLabel>Selecione os Produtos</ng-template>
@@ -36,8 +37,7 @@
                         <div class="keen-slider w-auto" #sliderRef>
                             <ng-container *ngFor="let product of products; let i = index; trackBy: trackByFn">
 
-                                <fuse-card
-                                    class="flex flex-col md:flex-row max-w-80 md:max-w-80 w-auto filter-shopping keen-slider__slide">
+                                <fuse-card class="flex flex-col md:flex-row w-full filter-shopping keen-slider__slide">
                                     <div class="flex-0 w-60 md:w-50 p-5">
                                         <img class="w-full h-full object-contain" src="assets/images/cards/box.png"
                                             alt="Card cover image">
@@ -64,7 +64,7 @@
                                         <hr class="w-full border-b mt-6 md:mt-auto mb-4">
                                         <div class="flex items-center -mx-3">
                                             <button class="px-3 mr-1" mat-button [color]="'primary'"
-                                            (click)="boughtsProducts(product)">
+                                                (click)="boughtsProducts(product)">
                                                 <mat-icon class="icon-size-5"
                                                     [svgIcon]="'heroicons_solid:shopping-cart'"></mat-icon>
                                                 <span class="ml-2">Adicionar ao Carrinho</span>
@@ -149,7 +149,8 @@
 
             <div class="flex flex-row mt-9 justify-end w-full">
                 <button mat-button matStepperPrevious>Voltar</button>
-                <button mat-button [color]="'primary'" (click)="createInvoice(vendaForm)" matStepperNext>Finalizar Venda</button>
+                <button mat-button [color]="'primary'" (click)="createInvoice(vendaForm)" matStepperNext>Finalizar
+                    Venda</button>
             </div>
         </mat-step>
         <mat-step>
@@ -200,7 +201,8 @@
                                 <div class="font-medium">{{today | date:'fullDate'}}</div>
                                 <!-- <div class="justify-self-end font-medium tracking-tight text-secondary">DUE DATE</div>
                                 <div class="font-medium">Aug 19, 2022</div> -->
-                                <div class="justify-self-end font-medium tracking-tight text-secondary">TOTAL DA VENDA</div>
+                                <div class="justify-self-end font-medium tracking-tight text-secondary">TOTAL DA VENDA
+                                </div>
                                 <div class="font-medium">{{venda?.total | currency:"BRL" }}</div>
                             </div>
                         </div>
@@ -216,44 +218,64 @@
                             <div class="col-span-12 my-4 border-b"></div>
 
                             <!-- Item -->
-                            <ng-container *ngFor="let produto of venda?.produtos; let i = index; let first = first; let last = last;">
-                            <div class="col-span-8">
-                                <div class="text-lg font-medium">{{produto?.name}}</div>
-                                <div class="mt-2 text-md text-secondary">
-                                    {{produto?.description}}.
+                            <ng-container
+                                *ngFor="let produto of venda?.produtos; let i = index; let first = first; let last = last;">
+                                <div class="col-span-8">
+                                    <div class="text-lg font-medium">{{produto?.name}}</div>
+                                    <div class="mt-2 text-md text-secondary">
+                                        {{produto?.description}}.
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="self-center text-right">{{produto?.price | currency:"BRL"}}</div>
-                            <div class="self-center text-right">1</div>
-                            <div class="col-span-2 self-center text-right">{{produto?.price | currency:"BRL" }}</div>
+                                <div class="self-center text-right">{{produto?.price | currency:"BRL"}}</div>
+                                <div class="self-center text-right">1</div>
+                                <div class="col-span-2 self-center text-right">{{produto?.price | currency:"BRL" }}
+                                </div>
 
-                            <!-- Divider -->
-                            <div class="col-span-12 my-4 border-b"></div>
-                            </ng-container>                                                
+                                <!-- Divider -->
+                                <div class="col-span-12 my-4 border-b"></div>
+                            </ng-container>
 
                             <!-- Spacer -->
-                            <div class="col-span-12 mt-16"></div>                  
+                            <div class="col-span-12 mt-16"></div>
 
                             <!-- Tax -->
-                            <div class="col-span-10 self-center font-medium tracking-tight text-secondary">FORMA DE PAGAMENTO</div>
+                            <div class="col-span-10 self-center font-medium tracking-tight text-secondary">FORMA DE
+                                PAGAMENTO</div>
                             <div class="col-span-2 text-right text-lg">{{venda?.formaPagamnto}}</div>
 
                             <!-- Divider -->
                             <div class="col-span-12 my-3 border-b"></div>
 
-                             <!-- Subtotal -->
-                             <div class="col-span-10 self-center font-medium tracking-tight text-secondary">SUBTOTAL
+                            <!-- Subtotal -->
+                            <div class="col-span-10 self-center font-medium tracking-tight text-secondary">SUBTOTAL
                             </div>
                             <div class="col-span-2 text-right text-lg">{{venda?.total | currency:"BRL" }}</div>
 
+                            <ng-container *ngIf="venda?.formaPagamnto==='Dinheiro'">
+                                <!-- Divider -->
+                                <div class="col-span-12 my-3 border-b"></div>
 
+                                <!-- Valor Pago -->
+                                <div class="col-span-10 self-center font-medium tracking-tight text-secondary">VALOR EM
+                                    DINHEIRO</div>
+                                <div class="col-span-2 text-right text-lg">{{venda?.valorPago | currency:"BRL" }}</div>
+
+                                <!-- Divider -->
+                                <div class="col-span-12 my-3 border-b"></div>
+
+                                <!-- Valor Troco-->
+                                <div class="col-span-10 self-center font-medium tracking-tight text-secondary">VALOR
+                                    TROCO</div>
+                                <div class="col-span-2 text-right text-lg">{{venda?.troco | currency:"BRL" }}</div>
+                            </ng-container>
                             <!-- Divider -->
                             <div class="col-span-12 my-3 border-b"></div>
 
                             <!-- Total -->
                             <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">
                                 TOTAL</div>
-                            <div class="col-span-2 text-right text-2xl font-medium">{{venda?.total | currency:"BRL" }}</div>
+                            <div class="col-span-2 text-right text-2xl font-medium">{{venda?.total | currency:"BRL" }}
+                            </div>
                         </div>
 
                         <div class="mt-16">

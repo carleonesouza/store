@@ -1,8 +1,10 @@
 import { Route } from '@angular/router';
-import { StoreComponent } from './store.component';
 import { CaixaComponent } from './caixa/caixa.component';
 import { VendasComponent } from './vendas/vendas.component';
 import { LayoutComponent } from 'app/layout/layout.component';
+import { CaixaDetailsComponent } from './caixa/details/details.component';
+import { StoreResolver } from './store.resolve';
+import { CanDeactivateCaixaDetails } from './store.guards';
 
 
 export const storeRoutes: Route[] = [
@@ -15,7 +17,14 @@ export const storeRoutes: Route[] = [
         children: [
             {
                 path: 'caixa',
-                component: CaixaComponent
+                component: CaixaComponent,
+                children:[
+                    {
+                        path: ':id',
+                        component: CaixaDetailsComponent,
+                        canDeactivate: [CanDeactivateCaixaDetails]
+                    }
+                ]
 
             },
             {
