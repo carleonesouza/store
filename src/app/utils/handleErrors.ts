@@ -31,20 +31,20 @@ export class HandleError {
         });
         return throwError(errorMenssage);
       }
-      if (handle.status === 400 || handle.status === 404) {
-        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
+      if (handle.status === 400 || handle.status === 403) {
+        errorMenssage = { message: handle.error.message, status: handle.status, operation: operation };
         console.log(errorMenssage);
 
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
           data: {
-            title: 'Ocorreu um erro!', message: handle.error,
+            title: 'Ocorreu um erro!', message: handle.error.message,
             confirm: false, recId: operation, status: handle.status
           },
         });
         return throwError(errorMenssage);
-      } else if (handle.status === 401 || handle.status === 404) {
-        errorMenssage = { message: handle.error, status: handle.status, operation: operation };
+      } else if (handle.status === 401 || handle.status === 403) {
+        errorMenssage = { message: handle.error.message, status: handle.status, operation: operation };
         console.log(errorMenssage);
         this.router.navigate(['401-unauthorized']);
 

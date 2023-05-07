@@ -12,7 +12,7 @@ export class DialogMessage  {
     constructor(private _snackBar: MatSnackBar, private dialog: MatDialog){}
 
     showMessageResponse(message: string, status: string | number) {
-        this._snackBar.open(message, ' ' + status, { duration: 6000 });
+        this._snackBar.open(message, ' ' + status, { duration: 1000 });
       }
 
       showDialog(title: string, message: string, item: any, confirmation: boolean): MatDialogRef<ConfirmationDialogComponent, any> {

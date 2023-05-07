@@ -1,3 +1,4 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,6 +24,8 @@ import localePt from '@angular/common/locales/pt';
 import { PacienteComponent } from './paciente/paciente.component';
 import { SharedModule } from 'app/shared/shared.module';
 
+import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
+
 registerLocaleData(localePt, 'pt-BR');
 
 
@@ -43,6 +46,7 @@ const maskConfig: Partial<IConfig> = { validation: false};
     PacienteComponent
   ],
   imports: [
+    HttpClientModule,
     CommonModule,
     RouterModule.forChild(pagesRoutes),
     NgxMaskModule.forRoot(maskConfig),
@@ -67,6 +71,6 @@ const maskConfig: Partial<IConfig> = { validation: false};
         monthYearA11yLabel: 'MMMM YYYY',
       }
     }
-  }, PagesService]
+  }, PagesService,  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}]
 })
 export class PagesModule { }

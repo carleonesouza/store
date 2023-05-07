@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Caixa } from 'app/models/caixa';
+import { StoreService } from '../store.service';
+import * as _moment from 'moment';
 
 @Component({
     selector: 'app-caixa',
@@ -13,13 +15,15 @@ import { Caixa } from 'app/models/caixa';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CaixaComponent implements OnInit, OnDestroy {
+export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
     caixas$: Observable<Caixa[]>;
-
+    caixaDay$: Observable<Caixa>;
+    zeroValor=0;
     caixas: Caixa[];
+    caixa$: Observable<Caixa>;
     drawerMode: 'side' | 'over';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -29,12 +33,21 @@ export class CaixaComponent implements OnInit, OnDestroy {
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _storeService: StoreService,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService
     )
     {
-    }
+        this.caixas$ = this._storeService.getCaixas();
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.caixaDay$= this._storeService.getCaixaToday(user?.id);
+        this.caixaDay$.subscribe((a) =>{
+            console.log(a);
+        });
+       //this.caixaDay$ = this._storeService.caixa$;
+     }
+
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -45,8 +58,6 @@ export class CaixaComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void
     {
-
-
         // Subscribe to MatDrawer opened change
         this.matDrawer.openedChange.subscribe((opened) => {
             if ( !opened )
@@ -91,6 +102,11 @@ export class CaixaComponent implements OnInit, OnDestroy {
                // this.createContact();
             });
     }
+
+
+    ngAfterViewInit(): void {
+
+    }
     /**
      * On destroy
      */
@@ -113,7 +129,6 @@ export class CaixaComponent implements OnInit, OnDestroy {
         // Go back to the list
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
 
-        console.log(this.matDrawer);
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }

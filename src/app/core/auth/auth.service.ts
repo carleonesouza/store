@@ -33,7 +33,7 @@ export class AuthService {
     }
 
     get accessToken(): string {
-        return localStorage.getItem('accessToken') ?? '';
+        return localStorage.getItem('accessToken');
     }
 
     // -----------------------------------------------------------------------------------------------------

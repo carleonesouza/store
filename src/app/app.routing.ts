@@ -72,9 +72,6 @@ export const appRoutes: Route[] = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         component  : LayoutComponent,
-        resolve    : {
-            initialData: InitialDataResolver,
-        },
         children   : [
             {path: '', loadChildren: () => import('app/pages/pages.module').then(m => m.PagesModule)},
             // 404 & Catch all

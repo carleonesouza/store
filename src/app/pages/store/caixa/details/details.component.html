@@ -6,16 +6,11 @@
         <!-- Header -->
         <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-teal-500 dark:bg-accent-700 rounded-b-xl ">
             <!-- Background -->
-            
+
             <!-- Close button -->
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
-                <button
-                    mat-icon-button
-                    [matTooltip]="'Fechar'"
-                    [routerLink]="['../']">
-                    <mat-icon
-                        class="text-white"
-                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                <button mat-icon-button [matTooltip]="'Fechar'" [routerLink]="['../']">
+                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
                 </button>
             </div>
         </div>
@@ -26,14 +21,11 @@
 
                 <!-- Avatar and actions -->
                 <div class="flex flex-auto items-end -mt-16">
-                
+
                     <!-- Actions -->
                     <div class="flex items-center ml-auto mb-1">
-                        <button
-                            mat-stroked-button
-                            (click)="toggleEditMode(true)">
-                            <mat-icon
-                                class="icon-size-5 text-white"
+                        <button mat-stroked-button (click)="toggleEditMode(true)">
+                            <mat-icon class="icon-size-5 text-white"
                                 [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
                             <span class="ml-2 text-white">Edit</span>
                         </button>
@@ -54,17 +46,16 @@
         <!-- Header -->
         <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-teal-500 dark:bg-accent-700 rounded-b-xl ">
             <!-- Background -->
-            
+
             <!-- Close button -->
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
-                <button
-                    mat-icon-button
-                    [matTooltip]="'Fechar'"
-                    [routerLink]="['../']">
-                    <mat-icon
-                        class="text-white"
-                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                <button mat-icon-button [matTooltip]="'Fechar'" [routerLink]="['../']">
+                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
                 </button>
+            </div>
+
+            <div>
+                <h2 class="text-4xl">{{title}}</h2>
             </div>
         </div>
 
@@ -74,92 +65,59 @@
                 <form [formGroup]="caixaForm">
                     <div class="mt-6">
                         <mat-chip-list aria-label="Fish selection">
-                            <mat-chip *ngIf="caixaForma?.get('status')?.value" class="ind-active">Aberto</mat-chip>
-                            <mat-chip *ngIf="!caixaForma?.get('status')?.value" class="ind-suspended">Fechado</mat-chip>
+                            <mat-chip *ngIf="caixaControlsForm.status.value" class="ind-active">Aberto</mat-chip>
+                            <mat-chip *ngIf="!caixaControlsForm.status.value" class="ind-suspended">Fechado</mat-chip>
                         </mat-chip-list>
-                    </div>                  
+                    </div>
 
                     <!-- Name -->
                     <div class="flex mt-8 space-x-4">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-form-field appearance="fill" class="fuse-mat-no-subscript w-full">
                             <mat-label>Data Abertura</mat-label>
-                            <mat-icon
-                                matPrefix
-                                class="hidden sm:flex icon-size-5"
-                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input
-                                matInput
-                                formControlName="criadoEm"
-                                [spellcheck]="false">
+                            <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                            <input matInput formControlName="criadoEm">
                         </mat-form-field>
-
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Data Fechamento</mat-label>
-                            <mat-icon
-                                matPrefix
-                                class="hidden sm:flex icon-size-5"
-                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input
-                                matInput
-                                formControlName="fechadoEm"
-                                [spellcheck]="false">
+                            <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                            <input matInput formControlName="fechadoEm" [spellcheck]="false">
                         </mat-form-field>
-                    </div>    
-                    
+                    </div>
+
                     <div class=" flex mt-8 space-x-4">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Valor Abertura</mat-label>
-                            <mat-icon
-                                matPrefix
-                                class="hidden sm:flex icon-size-5"
-                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input
-                                matInput
-                                formControlName="valorAbertura"
-                                [placeholder]="'Valor Abertura'"
-                                [spellcheck]="false">
+                            <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                [svgIcon]="'heroicons_solid:currency-dollar'"></mat-icon>
+                            <input matInput formControlName="valorAbertura" [placeholder]="'Valor Abertura'"
+                                currencyMask [spellcheck]="false">
                         </mat-form-field>
 
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Valor Fechamento</mat-label>
-                            <mat-icon
-                                matPrefix
-                                class="hidden sm:flex icon-size-5"
-                                [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input
-                                matInput
-                                formControlName="valorFechamento"
-                                [placeholder]="'Valor Fechamento'"
-                                [spellcheck]="false">
+                            <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                [svgIcon]="'heroicons_solid:currency-dollar'"></mat-icon>
+                            <input matInput formControlName="valorFechamento" [placeholder]="'Valor Fechamento'"
+                                currencyMask [spellcheck]="false">
                         </mat-form-field>
-                    </div>  
+                    </div>
 
-                   <!-- Actions -->
-                    <div class="flex items-center mt-12 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <!-- Actions -->
+                    <div
+                        class="flex items-center mt-18 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <!-- Delete -->
-                        <button
-                            mat-button
-                            [color]="'warn'"
-                            [matTooltip]="'Delete'"
-                            (click)="deleteContact()">
+                        <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteCaixa()">
                             Delete
                         </button>
                         <!-- Cancel -->
-                        <button
-                            class="ml-auto"
-                            mat-button
-                            [matTooltip]="'Cancel'"
-                            (click)="toggleEditMode(false)">
+                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" [routerLink]="['../']">
                             Cancel
                         </button>
                         <!-- Save -->
-                        <button
-                            class="ml-2"
-                            mat-flat-button
-                            [color]="'primary'"
-                            [disabled]="caixaForm.invalid"
-                            [matTooltip]="'Save'"
-                            (click)="updateContact()">
+                        <button class="ml-2" mat-flat-button  [color]="'primary'" [disabled]="caixaForm.invalid"
+                            [matTooltip]="'Save'" (click)="saveCaixa()">
                             Save
                         </button>
                     </div>

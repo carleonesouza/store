@@ -1,3 +1,4 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { MaterialAppModule } from 'material-app.module';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -27,6 +29,7 @@ const routerConfig: ExtraOptions = {
         AppComponent,
     ],
     imports     : [
+        HttpClientModule,
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
@@ -52,6 +55,8 @@ const routerConfig: ExtraOptions = {
         MaterialAppModule,
         FuseFindByKeyPipeModule,
     ],
+    providers:[
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
     bootstrap   : [
         AppComponent
     ]

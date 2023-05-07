@@ -4,8 +4,8 @@ import { Venda } from './vendas';
 export class Caixa {
 
     _id: string;
-    user: Usuario;
-    vendas?: Array<Venda>;
+    user: string;
+    orders?: Array<Venda>;
     valorAbertura: number;
     valorFechamento: number;
     criadoEm: Date;

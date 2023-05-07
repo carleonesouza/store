@@ -13,6 +13,7 @@ import { ProductsService } from 'app/pages/admin/products/products.service';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
 import { Observable, map, startWith } from 'rxjs';
 
+
 @Component({
   selector: 'app-vendas',
   templateUrl: './vendas.component.html',
