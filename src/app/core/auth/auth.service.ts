@@ -1,23 +1,21 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, switchMap, throwError } from 'rxjs';
+import { Observable, ReplaySubject, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
-import { UserService } from 'app/core/user/user.service';
 import { environment } from 'environments/environment';
 import { Usuario } from 'app/models/usuario';
-import { User } from '../user/user.types';
 
 @Injectable()
 export class AuthService {
     private _authenticated: boolean = false;
+    private _user: ReplaySubject<Usuario> = new ReplaySubject<Usuario>(1);
 
     /**
      * Constructor
      */
     constructor(
-        private _httpClient: HttpClient,
-        private _userService: UserService
+        private _httpClient: HttpClient
     ) {
     }
 
@@ -35,6 +33,22 @@ export class AuthService {
     get accessToken(): string {
         return localStorage.getItem('accessToken');
     }
+
+        /**
+         * Setter & getter for user
+         *
+         * @param value
+         */
+        set user(value: Usuario)
+        {
+            // Store the value
+            this._user.next(value);
+        }
+
+        get user$(): Observable<Usuario>
+        {
+            return this._user.asObservable();
+        }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -79,7 +93,7 @@ export class AuthService {
                 this._authenticated = true;
 
                 // Store the user on the user service
-                this._userService.user = response.user;
+                this.user = response.user;
                 localStorage.setItem('user', JSON.stringify(response.user));
 
                 // Return a new observable with the response
@@ -95,7 +109,6 @@ export class AuthService {
         if (this.accessToken) {
             // Set the authenticated flag to true
             this._authenticated = true;
-            this._userService.user =  JSON.parse(localStorage.getItem('user'));
             // Return true
             return of(true);
         } else {
@@ -138,7 +151,7 @@ export class AuthService {
                 this._authenticated = true;
 
                 // Store the user on the user service
-                this._userService.user = response.user;
+                this.user = response.user;
                 localStorage.setItem('user', JSON.stringify(response.user));
 
                 // Return a new observable with the response

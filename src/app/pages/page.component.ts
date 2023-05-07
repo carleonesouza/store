@@ -1,12 +1,11 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FuseVerticalNavigationAppearance, FuseVerticalNavigationMode, FuseNavigationItem, FuseVerticalNavigationPosition,
     FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { Subject } from 'rxjs';
 import { PagesService } from './pages.service';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
+import { Usuario } from 'app/models/usuario';
 
 @Component({
     selector: 'app-page',
@@ -23,7 +22,7 @@ export class PageComponent implements OnInit, OnDestroy {
     @Input() isScreenSmall: boolean;
     @Input() position: FuseVerticalNavigationPosition;
     @Input() transparentOverlay: boolean;
-    user: User;
+    user: Usuario;
     private navigationData: FuseNavigationItem[] = [
         {
             id: 'home',
@@ -31,13 +30,6 @@ export class PageComponent implements OnInit, OnDestroy {
             type: 'basic',
             icon: 'heroicons_outline:home',
             link: '/inicio'
-        },
-        {
-            id: 'pacientes',
-            title: 'Visão singular',
-            type: 'basic',
-            icon: 'heroicons_outline:heart',
-            link: '/pacientes'
         },
         {
             id: 'loja',
@@ -71,106 +63,7 @@ export class PageComponent implements OnInit, OnDestroy {
             type: 'collapsable',
             icon: 'mat_outline:settings',
             children: [
-                {
-                    id: 'cadastros',
-                    title: 'Gestão de Cadastros',
-                    subtitle: '',
-                    type: 'collapsable',
-                    icon: 'heroicons_outline:database',
-                    children: [
-                        {
-                            id: 'individuos',
-                            title: 'Indivíduo',
-                            type: 'basic',
-                            icon: 'heroicons_outline:user-group',
-                            link: 'admin/individuo/lista'
-                        },
-                        {
-                            id: 'cidades',
-                            title: 'Cidade',
-                            type: 'basic',
-                            icon: 'mat_outline:location_city',
-                            link: 'admin/cidade/lista'
-                        },
-                        {
-                            id: 'escolaridades',
-                            title: 'Escolaridade',
-                            type: 'basic',
-                            icon: 'mat_outline:school',
-                            link: 'admin/escolaridade/lista'
-                        },
-                        {
-                            id: 'estados',
-                            title: 'Estado',
-                            type: 'basic',
-                            icon: 'mat_outline:map',
-                            link: 'admin/estado/lista'
-                        },
-                        {
-                            id: 'generos',
-                            title: 'Gênero',
-                            type: 'basic',
-                            icon: 'mat_outline:transgender',
-                            link: 'admin/genero/lista'
-                        },
-                        {
-                            id: 'racas',
-                            title: 'Raça',
-                            type: 'basic',
-                            icon: 'mat_outline:people',
-                            link: 'admin/raca/lista'
-                        },
-                        {
-                            id: 'sexos',
-                            title: 'Sexo',
-                            type: 'basic',
-                            icon: 'mat_outline:6_ft_apart',
-                            link: 'admin/sexo/lista'
-                        },
-                        // {
-                        //     id: 'documentos',
-                        //     title: 'Tipo Documento',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:badge',
-                        //     link: 'admin/documento/lista'
-                        // },
-                        {
-                            id: 'vinculo',
-                            title: 'Tipo Vínculo',
-                            type: 'basic',
-                            icon: 'mat_outline:checklist',
-                            link: 'admin/tipo-vinculo/lista'
-                        },
-                        // {
-                        //     id: 'tipexames',
-                        //     title: 'Tipo Exame',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:healing',
-                        //     link: 'admin/tipo-exame/lista'
-                        // },
-                        // {
-                        //     id: 'exame',
-                        //     title: 'Exame',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:medication',
-                        //     link: 'admin/exame/lista'
-                        // },
-                        // {
-                        //     id: 'especialidades',
-                        //     title: 'Especialidades',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:health_and_safety',
-                        //     link: 'admin/especialidade/lista'
-                        // },
-                        // {
-                        //     id: 'condicaoclinica',
-                        //     title: 'Condição Clínica',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:personal_injury',
-                        //     link: 'admin/condicao-clinica/lista'
-                        // }
-                    ]
-                },
+
                 {
                     id:'settings',
                     title: 'Configurações',
@@ -178,13 +71,13 @@ export class PageComponent implements OnInit, OnDestroy {
                     type:'collapsable',
                     icon:'mat_outline:settings',
                     children:[
-                        {
-                            id: 'account',
-                            title: 'Conta',
-                            type: 'basic',
-                            icon: 'mat_outline:manage_accounts',
-                            link: 'admin/configuracoes/conta/lista'
-                        },
+                        // {
+                        //     id: 'account',
+                        //     title: 'Conta',
+                        //     type: 'basic',
+                        //     icon: 'mat_outline:manage_accounts',
+                        //     link: 'admin/configuracoes/conta/lista'
+                        // },
                         {
                             id: 'roles',
                             title: 'Perfis',
@@ -192,45 +85,9 @@ export class PageComponent implements OnInit, OnDestroy {
                             icon: 'mat_outline:supervisor_account',
                             link: 'admin/configuracoes/perfil/lista'
                         },
-                        {
-                            id: 'routes',
-                            title: 'Rota',
-                            type: 'basic',
-                            icon: 'mat_outline:follow_the_signs',
-                            link: 'admin/configuracoes/rota/lista'
-                        },
-                        {
-                            id: 'systems',
-                            title: 'Serviço',
-                            type: 'basic',
-                            icon: 'mat_outline:roofing',
-                            link: 'admin/configuracoes/servico/lista'
-                        },
+
                     ]
                 },
-                {
-
-                        id: 'customers',
-                        title: 'Cliente',
-                        subtitle: '',
-                        type: 'basic',
-                        icon: 'mat_outline:support_agent',
-                        link: 'admin/clientes/lista',
-                },
-                // {
-                //     id: 'account',
-                //     title: 'Conta',
-                //     type: 'basic',
-                //     icon: 'mat_outline:supervised_user_circle',
-                //     link: 'admin/customers/accounts'
-                // },
-                // {
-                //     id: 'contracts',
-                //     title: 'Contrato',
-                //     type: 'basic',
-                //     icon: 'mat_outline:receipt_long',
-                //     link: 'admin/customers/contracts/list'
-                // },
                 {
                     id: 'products',
                     title: 'Produto',
@@ -238,27 +95,7 @@ export class PageComponent implements OnInit, OnDestroy {
                     icon: 'mat_outline:storefront',
                     link: 'admin/produtos/lista'
                 },
-                // {
-                //     id: 'equipe',
-                //     title: 'Equipe',
-                //     type: 'basic',
-                //     icon: 'mat_outline:group_work',
-                //     link: 'admin/equipe/lista'
-                // },
-                {
-                    id: 'programacliente',
-                    title: 'Programa Cliente',
-                    type: 'basic',
-                    icon: 'mat_outline:business_center',
-                    link: 'admin/programa-cliente/lista'
-                },
-                {
-                    id: 'programasaude',
-                    title: 'Programa Saúde',
-                    type: 'basic',
-                    icon: 'mat_outline:spa',
-                    link: 'admin/programa-saude/lista'
-                },
+
             ]
         },
 
@@ -270,7 +107,7 @@ export class PageComponent implements OnInit, OnDestroy {
     /**
      * Constructor
      */
-    constructor(private _fuseNavigationService: FuseNavigationService, private _userService: UserService,
+    constructor(private _fuseNavigationService: FuseNavigationService,
         private _authService: AuthService, private _router: Router, private _pagesService: PagesService) { }
 
 
@@ -296,7 +133,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
         if (this._authService.check()) {
             this.isAuth = true;
-            this._userService.user$.subscribe((user)=> {
+            this._authService.user$.subscribe((user)=> {
                 this.user = user;
             });
         } else {

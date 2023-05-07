@@ -4,16 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'app/core/auth/auth.service';
-import { RoleModel } from 'app/models/role.model';
-import { User } from 'app/models/user';
 import { ListItemsComponent } from 'app/shared/list-items/list-items.component';
 import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { RoutesService } from '../../routes/routes.service';
-import { SystemsService } from '../../systems/systems.service';
 import { RolesService } from '../roles.service';
+import { Role } from 'app/models/role';
 
 @Component({
   selector: 'app-role-details',
@@ -43,17 +39,11 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
     private _formBuilder: FormBuilder,
     public _snackBar: MatSnackBar,
     private _rolesService: RolesService,
-    private _systemsService: SystemsService,
-    private _routesService: RoutesService,
     public _dialog: DialogMessage,
     private _dialogMessage: DialogMessage,
     private _route: ActivatedRoute,
     private _router: Router,
-    public dialog: MatDialog,) {
-    this.routes$ = this._routesService.getAllRoutes();
-    this.systems$ = this._systemsService.getAllSystems();
-
-  }
+    public dialog: MatDialog,) {  }
 
   ngOnInit(): void {
     // Open the drawer
@@ -221,7 +211,7 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-          const role = new RoleModel(result?.item);
+          const role = new Role(result?.item);
           role.isActive = role.isActive === true ? false : true;
           this._rolesService.ativaDesativaRole(role)
           .subscribe(() => {
@@ -246,7 +236,7 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
         route: this.roleForm.get('rota').value?.route?.route,
         sistema: this.roleForm.get('rota').value?.sistema
       };
-      const newRole = new RoleModel();
+      const newRole = new Role();
       newRole.rota = rotas;
       newRole.roles = roles;
       this._rolesService.addRoles(newRole)
@@ -274,7 +264,7 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
         route: this.roleForm.get('rota').value?.route?.route,
         sistema: this.roleForm.get('rota').value?.sistema
       };
-      const newRole = new RoleModel();
+      const newRole = new Role();
       newRole.rota = rotas;
       newRole.roles = roles;
       this._rolesService.addRoles(newRole)

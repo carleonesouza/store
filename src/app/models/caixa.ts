@@ -1,4 +1,3 @@
-import { Usuario } from './usuario';
 import { Venda } from './vendas';
 
 export class Caixa {

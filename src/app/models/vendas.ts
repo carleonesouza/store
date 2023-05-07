@@ -1,4 +1,4 @@
-import { Produto } from './produto.model';
+import { Produto } from './produto';
 import { Usuario } from './usuario';
 
 export class Venda {

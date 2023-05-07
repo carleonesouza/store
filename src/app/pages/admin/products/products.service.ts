@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Produto } from 'app/models/produto.model';
+import { Produto } from 'app/models/produto';
 import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -80,12 +80,12 @@ export class ProductsService {
   editProduct(product: Produto): Observable<any> {
     return this.products$.pipe(
       take(1),
-      switchMap(products => this._httpClient.put<any>(environment.apiManager + 'products/'+product.id, product)
+      switchMap(products => this._httpClient.put<any>(environment.apiManager + 'products/'+product._id, product)
         .pipe(
           map((updatedProduct) => {
 
             // Find the index of the updated product
-            const index = products.findIndex(item => item.id === product.id);
+            const index = products.findIndex(item => item.id === product._id);
 
             // Update the product
             products[index] = updatedProduct;
@@ -98,7 +98,7 @@ export class ProductsService {
           }),
           switchMap(updatedProduct => this.product$.pipe(
             take(1),
-            filter(item => item && item.recId === product.id),
+            filter(item => item && item._id === product._id),
             tap(() => {
               // Update the product if it's selected
               this._product.next(updatedProduct);
@@ -138,7 +138,7 @@ export class ProductsService {
   }
 
   deleteProduct(product: Produto): Observable<any> {
-    return this._httpClient.delete(environment.apiManager + 'products/'+product.id)
+    return this._httpClient.delete(environment.apiManager + 'products/'+product._id)
       .pipe(
         tap(result => this._product.next(result)),
         catchError(this.error.handleError<any>('deleteProduct'))

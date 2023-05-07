@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandleError } from 'app/utils/handleErrors';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, delay, tap } from 'rxjs/operators';
 import { environment } from 'environments/environment';
-import { RoleModel } from 'app/models/role.model';
 
 @Injectable({
   providedIn: 'root'

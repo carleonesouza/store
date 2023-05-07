@@ -9,11 +9,6 @@ import { RolesService } from './roles.service';
 import { RoleIdResolver, RolesResolver } from './roles.resolver';
 import { SharedModule } from 'app/shared/shared.module';
 import { MaterialAppModule } from 'material-app.module';
-import { SystemsModule } from '../systems/systems.module';
-import { SystemsResolver } from '../systems/systems.resolver';
-import { SystemsService } from '../systems/systems.service';
-import { RoutesService } from '../routes/routes.service';
-import { RoutesResolver } from '../routes/routes.resolver';
 import { HandleError } from 'app/utils/handleErrors';
 
 
@@ -21,16 +16,13 @@ import { HandleError } from 'app/utils/handleErrors';
   declarations: [
     RolesComponent,
     ListRolesComponent,
-    RoleDetailsComponent
   ],
   imports: [
     CommonModule,
     RolesRoutingModule,
     MaterialAppModule,
-    SystemsModule,
     SharedModule,
   ],
-  providers:[RolesService, RolesResolver, RoleIdResolver, RoutesResolver,
-    RoutesService, SystemsService, SystemsResolver, HandleError]
+  providers:[RolesService, RolesResolver, RoleIdResolver, HandleError]
 })
 export class RolesModule { }

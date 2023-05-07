@@ -2,10 +2,7 @@ import { Route } from '@angular/router';
 import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
-import { InitialDataResolver } from 'app/app.resolvers';
-import { Error401Component } from './shared/error/error-401/error-401.component';
 import { Error404Component } from './shared/error/error-404/error-404.component';
-import { Error500Component } from './shared/error/error-500/error-500.component';
 
 // @formatter:off
 /* eslint-disable max-len */

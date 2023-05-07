@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Produto } from 'app/models/produto.model';
+import { Produto } from 'app/models/produto';
 import { ListItemsComponent } from 'app/shared/list-items/list-items.component';
 import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject } from 'rxjs';
@@ -211,7 +210,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.productForm.valid) {
       const product = new Produto(this.productForm.value);
-      delete product.id;
+      delete product._id;
       this.saving = true;
       this.closeDrawer().then(() => true);
       this._productsService

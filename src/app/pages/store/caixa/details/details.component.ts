@@ -165,7 +165,7 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
             const user = new Usuario(this.caixaForm.get('user').value);
             caixa.criadoEm =this.caixaForm.get('criadoEm').value;
             delete caixa._id;
-            caixa.user = user.id;
+            caixa.user = user._id;
             this.closeDrawer().then(() => true);
             this._storeService
                 .addCaixaDay(caixa)

@@ -31,12 +31,6 @@ export const pagesRoutes: Route[] = [
                 ]
             },
             {
-                path: '', loadChildren: () => import('app/pages/paciente/paciente.module').then(p => p.PacienteModule),
-            },
-            // {
-            //     path: '', loadChildren: () => import('app/pages/prescricao/prescricao.module').then(pres => pres.PrescricaoModule),
-            // },
-            {
                 path: '', loadChildren: () => import('app/pages/profile/profile.module').then(p => p.ProfileModule),
             },
              // Documents

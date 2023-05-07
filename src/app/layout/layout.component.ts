@@ -1,4 +1,3 @@
-import { AccountRoutingModule } from './../pages/admin/settings/account/account-routing.module';
 import { Component, Inject, OnDestroy, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';

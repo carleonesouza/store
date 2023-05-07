@@ -2,7 +2,7 @@ import { Endereco } from './endereco';
 
 export class Usuario {
 
-    id?: string;
+    _id?: string;
     fullName: string;
     email: string;
     phone: string;

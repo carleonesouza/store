@@ -10,18 +10,13 @@ import { SharedModule } from 'app/shared/shared.module';
 import { MaterialAppModule } from 'material-app.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import { ListasComponent } from './listas/listas.component';
-import { IndividuosComponent } from './individuos/individuos.component';
-import { IndividuoResolver, IndividuosResolver } from './individuos/individuos.resolver';
-import { IndividuosService } from './individuos/individuos.service';
+
 import { AdminComponent } from './admin.component';
 
 
 @NgModule({
   declarations: [
-    AdminComponent,
-    IndividuosComponent,
-    ListasComponent,
+    AdminComponent
   ],
   imports: [
     CommonModule,
@@ -46,6 +41,6 @@ import { AdminComponent } from './admin.component';
         monthYearA11yLabel: 'MMMM YYYY',
       }
     }
-  }, IndividuoResolver, IndividuosResolver, IndividuosService]
+  }]
 })
 export class AdminModule { }

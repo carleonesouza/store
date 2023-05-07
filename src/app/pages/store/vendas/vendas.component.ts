@@ -7,7 +7,7 @@ import {
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Produto } from 'app/models/produto.model';
+import { Produto } from 'app/models/produto';
 import { Venda } from 'app/models/vendas';
 import { ProductsService } from 'app/pages/admin/products/products.service';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
@@ -141,7 +141,6 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   createInvoice(formGroup: FormGroup){
-
     this.venda = new Venda(formGroup.value);
     this.venda.formaPagamnto = this.formas[0];
   }
@@ -149,7 +148,7 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
   fecharVenda() {
     if (this.formas.length > 0) {
 
-        this.vendaForm.get('formaPagamento').patchValue(this.formas[0]);
+        //this.vendaForm.get('formaPagamento').patchValue(this.formas[0]);
 
       console.log(this.vendaForm.value);
     }

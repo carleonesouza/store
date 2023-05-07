@@ -11,20 +11,16 @@ import { MaterialAppModule } from 'material-app.module';
 import { pagesRoutes } from './pages.routes';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { FuseLoadingBarModule } from '@fuse/components/loading-bar';
-
-import { HomeComponent } from './home/home.component';
-import { DashboardAtendimentosComponent } from './dashboard/atendimentos/atendimentos.component';
-import { DashboardNpsComponent } from './dashboard/nps/nps.component';
-import { DashboardEquipesComponent } from './dashboard/equipes/equipes.component';
-import { PageComponent } from './page.component';
-import { PagesService } from './pages.service';
 import { FuseSplashScreenModule } from '@fuse/services/splash-screen';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-import { PacienteComponent } from './paciente/paciente.component';
 import { SharedModule } from 'app/shared/shared.module';
-
 import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
+
+import { HomeComponent } from './home/home.component';
+import { PageComponent } from './page.component';
+import { PagesService } from './pages.service';
+
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -39,11 +35,8 @@ const maskConfig: Partial<IConfig> = { validation: false};
 @NgModule({
   declarations: [
     HomeComponent,
-    DashboardAtendimentosComponent,
-    DashboardNpsComponent,
-    DashboardEquipesComponent,
     PageComponent,
-    PacienteComponent
+
   ],
   imports: [
     HttpClientModule,
