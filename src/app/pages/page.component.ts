@@ -133,9 +133,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
         if (this._authService.check()) {
             this.isAuth = true;
-            this._authService.user$.subscribe((user)=> {
-                this.user = user;
-            });
+            this.user = new Usuario(JSON.parse(localStorage.getItem('user')));
         } else {
             this._authService.signOut();
         }

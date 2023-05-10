@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, OnInit } from '@
 
 
 @Component({
-  selector: 'app-individuos',
+  selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   encapsulation  : ViewEncapsulation.None,

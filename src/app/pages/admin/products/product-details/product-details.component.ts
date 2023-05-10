@@ -222,7 +222,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
             this.toggleEditMode(false);
             this.closeDrawer().then(() => true);
             this._router.navigate(['/admin/produtos/lista']);
-            this._snackBar.open('Produto Salvo com Sucesso');
+            this._snackBar.open('Produto Salvo com Sucesso','Fechar', {
+              duration: 3000
+            });
             this.productForm.reset();
           });
     }

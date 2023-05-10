@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { Venda } from 'app/models/vendas';
+import * as _moment from 'moment';
+_moment.locale('pt-br');
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +46,14 @@ export class StoreService {
       );
   }
 
-  getCaixaToday(id): Observable<Caixa> {
-    return this._httpClient.get<Caixa>(environment.apiManager + 'cashies/user/' + id)
-      .pipe(catchError(this.error.handleError<Caixa>('getCaixas')));
+  getCaixaToday(id, date): Observable<Caixa> {
+    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/day/' + id, {date})
+      .pipe(
+        tap((result) =>{
+          localStorage.setItem('caixaId',result._id);
+            result.criadoEm  = _moment(result.criadoEm).format('L');
+        }),
+        catchError(this.error.handleError<Caixa>('getCaixas')));
   }
 
   getCaixaById(id) {
@@ -55,33 +62,53 @@ export class StoreService {
         first(),
         tap((caixa) => {
           this._caixa.next(caixa);
+          return caixa;
         }),
         catchError(this.error.handleError<Caixa>('getCaixaById'))
       );
   }
 
 
+  /**
+   * Abrir caixa do Dia
+   *
+   * @param caixa
+   * @returns Caixa
+   */
   addCaixaDay(caixa): Observable<Caixa> {
     return this._httpClient.post<Caixa>(environment.apiManager + 'cashies', caixa)
       .pipe(
         tap((result) => {
-          localStorage.setItem('caixaId', result?._id);
+          localStorage.setItem('caixaId',result._id);
           this._caixa.next(result);
+          return result;
         }),
         catchError(this.error.handleError<Caixa>('addCaixa'))
       );
   }
 
-  addVendaCaixa(caixa: any) {
+
+  /**
+   *Adicionar Venda ao Caixa do Dia
+   *
+   * @param venda
+   * @returns
+   */
+  addVendaCaixa(venda: any) {
     if (!localStorage.getItem('caixaId')) {
-      this._snackBar.open('Não existe caixa aberto, Favor abrir caixa antes de realizar a venda!');
+      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!','Fechar', {
+        duration: 3000
+      });
       catchError(this.error.handleError<Caixa>('AddVendaCaixa'));
     } else {
-      return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/' + localStorage.getItem('caixaId'), caixa)
+      return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/' + localStorage.getItem('caixaId'), [venda])
         .pipe(
           tap((result) => {
-            console.log(result);
             this._caixa.next(result);
+
+            this._snackBar.open('Compra Salva com Sucesso!','Fechar', {
+              duration: 3000
+            });
           }),
           catchError(this.error.handleError<Caixa>('addVendaCaixa'))
         );
@@ -90,17 +117,19 @@ export class StoreService {
 
   createVenda(venda: any){
     if (!localStorage.getItem('caixaId')) {
-      this._snackBar.open('Não existe caixa aberto, Favor abrir caixa antes de realizar a venda!');
+      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!','Fechar', {
+        duration: 3000
+      });
       catchError(this.error.handleError<Venda>('createVenda'));
     } else {
       return this._httpClient.post<Venda>(environment.apiManager + 'orders', venda)
         .pipe(
           tap((result) => {
-            console.log(result);
             this._caixa.next(result);
           }),
           catchError(this.error.handleError<Venda>('createVenda'))
         );
     }
   }
+
 }

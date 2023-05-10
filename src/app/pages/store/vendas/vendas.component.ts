@@ -11,7 +11,10 @@ import { Produto } from 'app/models/produto';
 import { Venda } from 'app/models/vendas';
 import { ProductsService } from 'app/pages/admin/products/products.service';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, Subject, map, startWith, takeUntil } from 'rxjs';
+import { StoreService } from '../store.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogMessage } from 'app/utils/dialog-message ';
 
 
 @Component({
@@ -38,16 +41,19 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
   isLinear = true;
   venda: Venda;
   today: number = Date.now();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  constructor(private _formBuilder: FormBuilder, private _productsService: ProductsService) {
+  constructor(private _formBuilder: FormBuilder, private _productsService: ProductsService,
+    private _storeService: StoreService, public _snackBar: MatSnackBar,
+    public _dialog: DialogMessage) {
     this.createVendasForm();
     this.filteredPag = this.pgtoCtrl.valueChanges.pipe(
       startWith(null),
       map((formas: string | null) => (formas ? this._filter(formas) : this.allFormas.slice())),
     );
 
-    this.vendaForm.get('valorPago').valueChanges.subscribe((value) =>{
-      if(this.selectedProducts.length > 0){
+    this.vendaForm.get('valorPago').valueChanges.subscribe((value) => {
+      if (this.selectedProducts.length > 0) {
         this.vendaForm.get('troco').setValue(this._calcVendaTroco(this.selectedProducts, value));
       }
     });
@@ -73,11 +79,13 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     if (this.slider) { this.slider.destroy(); }
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
   }
 
   createVendasForm() {
     this.vendaForm = this._formBuilder.group({
-      id: new FormControl(''),
       nvenda: new FormControl(),
       produtos: new FormControl([], Validators.required),
       total: new FormControl(),
@@ -140,17 +148,23 @@ export class VendasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  createInvoice(formGroup: FormGroup){
+  createInvoice(formGroup: FormGroup) {
     this.venda = new Venda(formGroup.value);
     this.venda.formaPagamnto = this.formas[0];
   }
 
   fecharVenda() {
-    if (this.formas.length > 0) {
+    if (this.formas.length > 0 && this.vendaForm.valid) {
 
-        //this.vendaForm.get('formaPagamento').patchValue(this.formas[0]);
-
-      console.log(this.vendaForm.value);
+      this.vendaForm.get('formaPagamento').patchValue(this.formas[0]);
+      const venda = new Venda(this.vendaForm.value);
+      this._storeService
+        .createVenda(venda)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          (result) => {
+            this._storeService.addVendaCaixa(result._id).pipe(takeUntil(this._unsubscribeAll)).subscribe(() => this.vendaForm.reset());
+          });
     }
   }
 

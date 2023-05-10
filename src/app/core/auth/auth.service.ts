@@ -60,7 +60,7 @@ export class AuthService {
      * @param email
      */
     forgotPassword(email: string): Observable<any> {
-        return this._httpClient.post('api/auth/forgot-password', email);
+        return of();
     }
 
     /**
@@ -69,7 +69,7 @@ export class AuthService {
      * @param password
      */
     resetPassword(password: string): Observable<any> {
-        return this._httpClient.post('api/auth/reset-password', password);
+        return of();
     }
 
     /**
@@ -127,6 +127,7 @@ export class AuthService {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
+        localStorage.removeItem('caixaId');
 
         // Set the authenticated flag to false
         this._authenticated = false;

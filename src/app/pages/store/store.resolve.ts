@@ -28,7 +28,7 @@ export class StoreResolver implements Resolve<any>
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Caixa>
     {
-        return this._storeService.getCaixaToday(route.paramMap.get('id'))
+        return this._storeService.getCaixaById(route.paramMap.get('id'))
                    .pipe(
                        // Error here means the requested contact is not available
                        catchError((error) => {

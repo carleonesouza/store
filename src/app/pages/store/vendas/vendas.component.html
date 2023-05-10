@@ -2,8 +2,8 @@
 
     <!-- Header -->
     <div class="bg-card rounded">
-        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
-            <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
+        <div class="flex flex-col sm:flex-wrap w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div class="flex flex-col sm:flex-wrap flex-auto sm:items-center min-w-0 my-8 sm:my-12">
                 <!-- Avatar and name -->
                 <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-5 sm:my-12">
                     <div class="flex flex-auto items-center min-w-0">
@@ -25,6 +25,8 @@
 
         </div>
     </div>
+
+    <!--Steps-->
     <mat-stepper [linear]="isLinear" orientation="vertical" #stepper class="rounded bg-transparent"
         [formGroup]="vendaForm">
         <mat-step [stepControl]="vendaForm" class="p-4">
@@ -110,7 +112,7 @@
                                 <input placeholder="Forma de Pagamento..." #pagamentoInput [formControl]="pgtoCtrl"
                                     [matAutocomplete]="auto" [matChipInputFor]="chipList"
                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                    (matChipInputTokenEnd)="add($event)">
+                                    (matChipInputTokenEnd)="add($event)" required>
                             </mat-chip-list>
                             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                                 <mat-option *ngFor="let formas of filteredPag | async" [value]="formas">
@@ -153,17 +155,18 @@
                     Venda</button>
             </div>
         </mat-step>
+
         <mat-step>
             <ng-template matStepLabel>Finalizar Venda</ng-template>
 
-            <div class="inset-0 min-w-0 text-center">
+            <div class="inset-0 min-w-0 text-center flex-col">
 
                 <!-- Main -->
-                <div class="inline-block p-6 sm:p-10 text-left print:p-0">
+                <div class="inline-block flex p-6 sm:p-10 text-left print:p-0 overflow-x-auto ">
 
                     <!-- Invoice -->
                     <div
-                        class="w-240 min-w-240 p-16 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
+                        class="md:w-auto sm:w-auto flex-col w-240 min-w-240 p-16 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
 
                         <div class="flex items-start">
                             <div class="grid grid-rows-2 place-items-start gap-y-12">
@@ -301,9 +304,10 @@
 
             <div class="flex flex-row mt-9 justify-end w-full">
                 <button mat-button matStepperPrevious>Voltar</button>
-                <button mat-button (click)="fecharVenda()">Fechar Venda</button>
+                <button mat-button (click)="fecharVenda();stepper.reset()">Fechar Venda</button>
             </div>
         </mat-step>
+
     </mat-stepper>
 
 </div>

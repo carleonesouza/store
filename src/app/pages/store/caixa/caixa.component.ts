@@ -1,12 +1,16 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
+import { MatTableDataSource } from '@angular/material/table';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Caixa } from 'app/models/caixa';
 import { StoreService } from '../store.service';
 import * as _moment from 'moment';
+import { MatSort } from '@angular/material/sort';
+
+_moment.locale('pt-br');
 
 @Component({
     selector: 'app-caixa',
@@ -17,11 +21,16 @@ import * as _moment from 'moment';
 })
 export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    @ViewChild('recentTransactionsTable', { read: MatSort }) recentTransactionsTableMatSort: MatSort;
+
+    recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
+    recentTransactionsTableColumns: string[] = ['numero', 'data', 'pagamento', 'total', 'status'];
 
     caixas$: Observable<Caixa[]>;
     caixaDay$: Observable<Caixa>;
-    zeroValor=0;
+    zeroValor = 0;
+    data=[];
     caixas: Caixa[];
     caixa$: Observable<Caixa>;
     drawerMode: 'side' | 'over';
@@ -37,16 +46,12 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService
-    )
-    {
+    ) {
         this.caixas$ = this._storeService.getCaixas();
         const user = JSON.parse(localStorage.getItem('user'));
-        this.caixaDay$= this._storeService.getCaixaToday(user?.id);
-        this.caixaDay$.subscribe((a) =>{
-            console.log(a);
-        });
-       //this.caixaDay$ = this._storeService.caixa$;
-     }
+        const date = _moment().format('L');
+        this.caixaDay$ = this._storeService.getCaixaToday(user?._id, date);
+    }
 
 
     // -----------------------------------------------------------------------------------------------------
@@ -56,12 +61,16 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
+
+        this.caixaDay$.subscribe((data) => {
+            this.data = data.orders;
+            this.recentTransactionsDataSource.data = data.orders;
+        });
+
         // Subscribe to MatDrawer opened change
         this.matDrawer.openedChange.subscribe((opened) => {
-            if ( !opened )
-            {
+            if (!opened) {
                 // Remove the selected contact when drawer closed
                 //this.selectedContact = null;
 
@@ -73,15 +82,13 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({matchingAliases}) => {
+            .subscribe(({ matchingAliases }) => {
 
                 // Set the drawerMode if the given breakpoint is active
-                if ( matchingAliases.includes('lg') )
-                {
+                if (matchingAliases.includes('lg')) {
                     this.drawerMode = 'side';
                 }
-                else
-                {
+                else {
                     this.drawerMode = 'over';
                 }
 
@@ -99,7 +106,7 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
                 )
             )
             .subscribe(() => {
-               // this.createContact();
+                // this.createContact();
             });
     }
 
@@ -110,8 +117,7 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
@@ -124,24 +130,26 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * On backdrop clicked
      */
-    onBackdropClicked(): void
-    {
+    onBackdropClicked(): void {
         // Go back to the list
-        this._router.navigate(['./'], {relativeTo: this._activatedRoute});
+        this._router.navigate(['./'], { relativeTo: this._activatedRoute });
 
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
 
+    getTotalCost() {
+        return this.data.reduce((acc, venda) => acc + venda?.total, 0);
+      }
+
     /**
      * Create contact
      */
-    createContact(event): void
-    {
+    createContact(event): void {
         if (event) {
             this._router.navigate(['./add'], { relativeTo: this._activatedRoute });
             this._changeDetectorRef.markForCheck();
-          }
+        }
     }
 
     /**
@@ -150,8 +158,7 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 }
