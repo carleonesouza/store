@@ -35,9 +35,16 @@
                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:save'"></mat-icon>
                                 <span class="ml-2">Export</span>
                             </button> -->
-                            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createContact($event)">
+                            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createCaixa($event)" 
+                            *ngIf="!fechar">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                                 <span class="ml-2 mr-1">Abrir Caixa</span>
+                            </button>
+
+                            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="fecharCaixaDia($event)"
+                            *ngIf="fechar">
+                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                <span class="ml-2 mr-1">Fechar Caixa</span>
                             </button>
 
                             <!-- Actions menu (visible on xs) -->
@@ -57,13 +64,12 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full mt-8"
-                        *ngIf="caixaDay$ | async; else noCaixa">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full mt-8">
 
-                        <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">
-                            <!-- Previous statement -->
+                        <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">                          
                             <div
-                                class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden">
+                                class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden"                                
+                                *ngIf="caixaDay$ | async as caixaDay; else noCaixa">
                                 <div class="absolute bottom-0 right-0 w-24 h-24 -m-6">
                                     <mat-icon class="icon-size-24 opacity-25 text-green-500 dark:text-green-400"
                                         [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
@@ -72,11 +78,9 @@
                                     <div class="flex flex-col">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate">Caixa do
                                             Dia</div>
-                                        <div class="text-green-600 font-medium text-sm">
-                                            Status <span *ngIf="(caixaDay$ | async).status">Aberto</span> <span
-                                                *ngIf="!(caixaDay$ | async).status">Fechado</span> {{(caixaDay$ |
-                                            async).criadoEm |
-                                            date:'fullDate':'':'pt-br' }}
+                                        <div>
+                                            Status <span class="text-green-600 font-medium text-sm" *ngIf="caixaDay.status">Aberto</span> 
+                                            <span class="text-red-600 font-medium text-sm" *ngIf="!caixaDay.status">Fechado</span> {{caixaDay.criadoEm }}
                                         </div>
                                     </div>
                                     <div class="ml-auto -mt-2">
@@ -129,23 +133,25 @@
                                         <div class="text-sm font-medium leading-none text-secondary">Valor Abertura
                                         </div>
                                         <div class="mt-2 font-medium text-3xl leading-none">
-                                            {{(caixaDay$ | async).valorAbertura | currency:'BRL'}}</div>
+                                            {{caixaDay.valorAbertura | currency:'BRL'}}</div>
                                     </div>
                                     <div class="flex flex-col mx-6 my-3">
                                         <div class="text-sm font-medium leading-none text-secondary">Valor
                                             Fechamento</div>
-                                        <ng-container *ngIf="(caixaDay$ | async).valorFechamento > 0; else noValor">
+                                        <ng-container *ngIf="caixaDay.valorFechamento > 0; else noValor">
                                             <div class="mt-2 font-medium text-3xl leading-none">
-                                                {{(caixaDay$ | async).valorFechamento | currency:'BRL'}}</div>
+                                                {{caixaDay.valorFechamento | currency:'BRL'}}</div>
                                         </ng-container>
                                     </div>
 
                                     <div class="flex flex-col mx-6 my-3">
                                         <div class="text-sm font-medium leading-none text-secondary">Total</div>
-                                        <ng-container *ngIf="(caixaDay$ | async).valorFechamento > 0; else noValor">
-                                            <div class="mt-2 font-medium text-3xl leading-none">{{(caixaDay$ |
-                                                async).total |
-                                                currency:'BRL'}}</div>
+                                        <ng-container *ngIf="caixaDay.valorFechamento > 0; else noValor">
+                                            <div class="mt-2 font-medium text-3xl leading-none" *ngIf="caixaDay.valorAbertura > caixaDay.valorFechamento ; else Maior">{{ caixaDay.valorFechamento | currency:'BRL'}}</div>
+                                            <ng-template #Maior>
+                                                <div class="mt-2 font-medium text-3xl leading-none">{{caixaDay.valorFechamento - caixaDay.valorAbertura | currency:'BRL'}}</div>
+                                            </ng-template>
+                                           
                                         </ng-container>
                                     </div>
 
@@ -158,7 +164,8 @@
 
                             <!-- Current statement -->
                             <div
-                                class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden">
+                                class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden"
+                                *ngIf="caixaYesterday$ | async as caixaYesterday; else noCaixa">
                                 <div class="absolute bottom-0 right-0 w-24 h-24 -m-6">
                                     <mat-icon class="icon-size-24 opacity-25 text-red-500 dark:text-red-400"
                                         [svgIcon]="'heroicons_outline:exclamation-circle'"></mat-icon>
@@ -167,10 +174,10 @@
                                     <div class="flex flex-col">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate">Caixa de
                                             Ontem</div>
-                                        <div class="text-red-600 font-medium text-sm">
-                                            Status <span *ngIf="(caixaDay$ | async).status">Aberto</span> <span
-                                                *ngIf="!(caixaDay$ | async).status">Fechado</span> {{(caixaDay$ |
-                                            async).criadoEm }}
+                                        <div class="text-red-600 font-medium text-sm">Status 
+                                            <span *ngIf="caixaYesterday.status">Aberto</span> 
+                                            <span *ngIf="!caixaYesterday.status">Fechado</span>
+                                            {{ caixaYesterday.criadoEm }}
                                         </div>
                                     </div>
                                     <div class="ml-auto -mt-2">
@@ -223,22 +230,21 @@
                                         <div class="text-sm font-medium leading-none text-secondary">Valor Abertura
                                         </div>
                                         <div class="mt-2 font-medium text-3xl leading-none">
-                                            {{(caixaDay$ | async).valorAbertura | currency:'BRL'}}</div>
+                                            {{caixaYesterday.valorAbertura | currency:'BRL'}}</div>
                                     </div>
                                     <div class="flex flex-col mx-6 my-3">
                                         <div class="text-sm font-medium leading-none text-secondary">Valor
                                             Fechamento</div>
-                                        <ng-container *ngIf="(caixaDay$ | async).valorFechamento > 0; else noValor">
+                                        <ng-container *ngIf="caixaYesterday.valorFechamento > 0; else noValor">
                                             <div class="mt-2 font-medium text-3xl leading-none">
-                                                {{(caixaDay$ | async).valorFechamento | currency:'BRL'}}</div>
+                                                {{caixaYesterday.valorFechamento | currency:'BRL'}}</div>
                                         </ng-container>
                                     </div>
 
                                     <div class="flex flex-col mx-6 my-3">
                                         <div class="text-sm font-medium leading-none text-secondary">Total</div>
-                                        <ng-container *ngIf="(caixaDay$ | async).valorFechamento > 0; else noValor">
-                                            <div class="mt-2 font-medium text-3xl leading-none">{{(caixaDay$ |
-                                                async).total |
+                                        <ng-container *ngIf="caixaYesterday.valorFechamento > 0; else noValor">
+                                            <div class="mt-2 font-medium text-3xl leading-none">{{ caixaYesterday.valorAbertura > caixaYesterday.valorFechamento ? caixaYesterday.valorFechamento :  caixaYesterday.valorFechamento - caixaYesterday.valorAbertura |
                                                 currency:'BRL'}}</div>
                                         </ng-container>
                                     </div>

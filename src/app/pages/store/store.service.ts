@@ -46,17 +46,17 @@ export class StoreService {
       );
   }
 
-  getCaixaToday(id, date): Observable<Caixa> {
+  getCaixaToday(id: string, date: string): Observable<Caixa> {
     return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/day/' + id, {date})
       .pipe(
         tap((result) =>{
           localStorage.setItem('caixaId',result._id);
-            result.criadoEm  = _moment(result.criadoEm).format('L');
+            //result.criadoEm  = _moment(result.criadoEm).format('L');
         }),
         catchError(this.error.handleError<Caixa>('getCaixas')));
   }
 
-  getCaixaById(id) {
+  getCaixaById(id: string) {
     return this._httpClient.get<Caixa>(environment.apiManager + 'cashies/' + id)
       .pipe(
         first(),
@@ -66,6 +66,15 @@ export class StoreService {
         }),
         catchError(this.error.handleError<Caixa>('getCaixaById'))
       );
+  }
+
+  getCaixaYestarday(id: string, date: string): Observable<Caixa>{
+    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/yesterday/' + id, {date})
+    .pipe(
+      tap((result) =>{
+          //result.criadoEm  = _moment(result.criadoEm).format('L');
+      }),
+      catchError(this.error.handleError<Caixa>('getCaixaYestarday')));
   }
 
 
@@ -87,6 +96,16 @@ export class StoreService {
       );
   }
 
+  closeCaixaDay(id: string, caixa: Caixa){
+    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/'+ id, {caixa})
+      .pipe(
+        tap((result) => {
+          console.log(result);
+          return result;
+        }),
+        catchError(this.error.handleError<Caixa>('closeCaixaDay'))
+      );
+  }
 
   /**
    *Adicionar Venda ao Caixa do Dia

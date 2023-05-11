@@ -117,9 +117,14 @@
                         </button>
                         <!-- Save -->
                         <button class="ml-2" mat-flat-button  [color]="'primary'" [disabled]="caixaForm.invalid"
-                            [matTooltip]="'Save'" (click)="saveCaixa()">
+                            [matTooltip]="'Save'" (click)="saveCaixa()" *ngIf="!fechar">
                             Save
                         </button>
+
+                        <button class="ml-2" mat-flat-button  [color]="'primary'" [disabled]="caixaForm.invalid"
+                        [matTooltip]="'Save'" (click)="fecharCaixaDia()" *ngIf="fechar">
+                        Close
+                    </button>
                     </div>
 
                 </form>

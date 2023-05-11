@@ -51,6 +51,8 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
     tagsEditMode: boolean = false;
     title: string;
     caixa: Caixa;
+    fechar = false;
+    caixaDay: Caixa;
     caixaForm: FormGroup;
     caixas: Caixa[];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -84,6 +86,14 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
             this.createCaixa();
             this.caixaForm.get('user').setValue(JSON.parse(localStorage.getItem('user')));
         }
+        if (this._route.snapshot.paramMap.get('id') === 'close') {
+            this.editMode = true;
+            this._caixaComponent.matDrawer.open();
+            this.title = 'Fechar Caixa';
+            this.fechar = true;
+            this.defineFechamento();
+
+        }
     }
 
     /**
@@ -110,7 +120,6 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
 
         // Create the caixa form
         this.caixaForm = this._formBuilder.group({
-            id: new FormControl(''),
             user: new FormControl(''),
             orders: new FormControl(Array<Venda>()),
             valorAbertura: new FormControl('', Validators.required),
@@ -143,6 +152,29 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
+
+    defineFechamento() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const date = _moment().format('L');
+        this.createCaixa();
+        this._storeService.getCaixaToday(user?._id, date).subscribe((caixa) => {
+            this.caixaDay = caixa;
+            const totalVenda = this.getTotal(caixa.orders);
+
+            this.caixaForm.get('valorAbertura').setValue(this.caixaDay.valorAbertura);
+            this.caixaForm.get('valorFechamento').setValue(totalVenda);
+        });
+
+        this.caixaForm.controls['valorAbertura'].disable();
+        this.caixaForm.controls['valorFechamento'].enable();
+        this.caixaForm.get('fechadoEm').setValue(_moment().format('L'));
+        this.caixaForm.get('user').setValue(JSON.parse(localStorage.getItem('user')));
+    }
+
+    getTotal(vendas) {
+        return vendas.reduce((acc, venda) => acc + venda?.total, 0);
+    }
+
     cancelCreate(): Promise<MatDrawerToggleResult> {
         // Go back to the list
         return this._caixaComponent.matDrawer.close();
@@ -157,6 +189,32 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
      */
     trackByFn(index: number, item: any): any {
         return item.id || index;
+    }
+
+    fecharCaixaDia() {
+        if (this.caixaForm.valid) {
+            const caixa = new Caixa(this.caixaForm.value);
+            const user = new Usuario(this.caixaForm.get('user').value);
+            const caixaID = localStorage.getItem('caixaId');
+            caixa.criadoEm = this.caixaForm.get('criadoEm').value;
+            caixa.fechadoEm = this.caixaForm.get('fechadoEm').value;
+            caixa.status = false;
+            delete caixa._id;
+            this.closeDrawer().then(() => true);
+            this._storeService
+                .closeCaixaDay(caixaID, caixa)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(
+                    () => {
+                        this.toggleEditMode(false);
+                        this.closeDrawer().then(() => true);
+                        this._router.navigate(['../']);
+                        this._snackBar.open('Caixa Fechado com Sucesso!', 'Fechar', {
+                            duration: 3000
+                        });
+                        this.caixaForm.reset();
+                    });
+        }
     }
 
 
@@ -176,9 +234,9 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
                         this.toggleEditMode(false);
                         this.closeDrawer().then(() => true);
                         this._router.navigate(['../']);
-                        this._snackBar.open('Caixa Aberto com Sucesso!','Fechar', {
+                        this._snackBar.open('Caixa Aberto com Sucesso!', 'Fechar', {
                             duration: 3000
-                          });
+                        });
                         this.caixaForm.reset();
                     });
         }

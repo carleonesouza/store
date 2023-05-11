@@ -19,7 +19,7 @@ _moment.locale('pt-br');
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CaixaComponent implements OnInit, OnDestroy {
 
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
     @ViewChild('recentTransactionsTable', { read: MatSort }) recentTransactionsTableMatSort: MatSort;
@@ -29,7 +29,9 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
 
     caixas$: Observable<Caixa[]>;
     caixaDay$: Observable<Caixa>;
+    caixaYesterday$: Observable<Caixa>;
     zeroValor = 0;
+    fechar= false;
     data=[];
     caixas: Caixa[];
     caixa$: Observable<Caixa>;
@@ -50,7 +52,9 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.caixas$ = this._storeService.getCaixas();
         const user = JSON.parse(localStorage.getItem('user'));
         const date = _moment().format('L');
+        const yesterday = _moment().subtract(1, 'day').format('L');
         this.caixaDay$ = this._storeService.getCaixaToday(user?._id, date);
+        this.caixaYesterday$ = this._storeService.getCaixaYestarday(user?._id, yesterday);
     }
 
 
@@ -64,6 +68,9 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit(): void {
 
         this.caixaDay$.subscribe((data) => {
+            if(data.status){
+                this.fechar = true;
+            }
             this.data = data.orders;
             this.recentTransactionsDataSource.data = data.orders;
         });
@@ -111,9 +118,6 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
 
-    ngAfterViewInit(): void {
-
-    }
     /**
      * On destroy
      */
@@ -142,10 +146,17 @@ export class CaixaComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.data.reduce((acc, venda) => acc + venda?.total, 0);
       }
 
+    fecharCaixaDia(event): void{
+        if (event) {
+            this._router.navigate(['./close'], { relativeTo: this._activatedRoute });
+            this._changeDetectorRef.markForCheck();
+        }
+    }
+
     /**
      * Create contact
      */
-    createContact(event): void {
+    createCaixa(event): void {
         if (event) {
             this._router.navigate(['./add'], { relativeTo: this._activatedRoute });
             this._changeDetectorRef.markForCheck();
