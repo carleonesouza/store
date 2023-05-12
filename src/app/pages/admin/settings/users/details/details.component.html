@@ -209,65 +209,35 @@
 
                     <!-- Section -->
                     <div class="w-full">
-                        <div class="text-xl">Selecione as Roles do usuário</div>
+                        <div class="text-xl">Selecione o Perfil do Usuário</div>
+                        <div class="text-secondary"></div>
                     </div>
-                    <!-- <div class="mt-4">
-                        <div class="space-y-4">
-
-                            <div class="mt-2">
-                                <ng-container formArrayName="roles" *ngFor="let role of rolesControls; let i = index; let first = first; 
-    let last = last; trackBy: trackByFn">
-                                    <div class="relative flex">
-                                        <ng-conteiner [formGroup]="role" class="w-full">
-
-                                            <mat-form-field appearance="fill" class="w-full">
-                                                <mat-label>Role</mat-label>
-                                                <mat-icon class="mr-2" [svgIcon]="'mat_outline:alt_route'" matPrefix>
-                                                </mat-icon>
-                                                <mat-select formControlName="role" [compareWith]="compareFn">
-                                                    <mat-option *ngFor="let role of roles$ | async" [value]="role">
-                                                        {{ role.roleName }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                            <div class="flex flex-col sm:flex-row sm:items-center">
-
-                                                <div class="hidden sm:flex flex-auto"></div>
-                                                <div class="flex items-center  sm:mt-0">
-                                                
-                                                    <div class=" px-3 mr-1 -ml-2 sm:ml-0">
-                                                        <ng-container *ngIf="!(first && last)">
-                                                            <div class="flex items-center w-10 pl-2">
-                                                                <button class="w-8 h-8 min-h-8" type="button"
-                                                                    mat-icon-button (click)="removeRoleField(i)"
-                                                                    matTooltip="Remover">
-                                                                    <mat-icon class="icon-size-5" [color]="'warn'"
-                                                                        [svgIcon]="'heroicons_solid:trash'">
-                                                                    </mat-icon>
-                                                                </button>
-                                                            </div>
-                                                        </ng-container>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </ng-conteiner>
-                                    </div>
-                                </ng-container>
-                            </div>
-
+                    <!-- Perfil -->
+                    <div class="sm:col-span-4 mt-8">
+                        <div class="flex-auto w-full">
+                            <mat-form-field class="w-full" appearance="fill">
+                                <mat-label>Perfil</mat-label>
+                                <mat-icon class="mr-2" [svgIcon]="'heroicons_outline:book-open'"></mat-icon>
+                                <input matInput aria-label="Perfil"[matAutocomplete]="auto"
+                                    formControlName="profile">
+                                
+                                <mat-spinner *ngIf="isLoadingPerfis" diameter="20" matSuffix>
+                                </mat-spinner>
+                                <mat-autocomplete #auto="matAutocomplete" [compareWith]="compareFn"
+                                    [displayWith]="itemDisplayFn">
+                                    <mat-option *ngFor="let perfil of perfis$ | async" [value]="perfil.role"
+                                        [id]="perfil._id">
+                                        {{ perfil?.role }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
                         </div>
-
-                        <div class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
-                            (click)="addRoleField()">
-                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                            <span class="ml-2 font-medium text-secondary group-hover:underline">Adicionar
-                                Role</span>
-                        </div>
-                    </div> -->
+                    </div>
+                    
                     <!-- Divider -->
                     <div class="mt-11 mb-10 border-t"></div>
 
-                    <ng-container *ngIf="editMode">
+                    <ng-container>
                         <!-- Section -->
                         <div class="w-full">
                             <div class="text-xl">Criar nova senha</div>

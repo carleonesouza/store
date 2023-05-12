@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ListItemsComponent } from 'app/shared/list-items/list-items.component';
 import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { Perfil } from 'app/models/perfil';
+import { RolesService } from '../../roles/roles.service';
 
 @Component({
   selector: 'app-details',
@@ -31,7 +33,9 @@ export class DetailsComponent implements OnInit, OnDestroy{
   user$: Observable<any>;
   roles$: Observable<any[]>;
   rotas$: Observable<any[]>;
+  isLoadingPerfis: boolean = false;
   rotas: any[];
+  perfis$: Observable<Perfil[]>;
   saving: boolean;
   useDefault = false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -42,9 +46,12 @@ export class DetailsComponent implements OnInit, OnDestroy{
     public _snackBar: MatSnackBar,
     private _usersService: UsersService,
     private _route: ActivatedRoute,
+    private _perfilService: RolesService,
     private _router: Router,
     public _dialog: DialogMessage,
-    public dialog: MatDialog) {  }
+    public dialog: MatDialog) {
+      this.perfis$ = this._perfilService.getAllRoles();
+     }
 
   ngOnInit(): void {
     // Open the drawer
@@ -118,7 +125,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
       password: new FormControl(''),
       confirmPassword: new FormControl(''),
       address: new FormControl(''),
-      profile: this._formBuilder.array([this.createFormRoles()]),
+      profile: new FormControl(''),
       status: new FormControl('')
     });
   }
@@ -136,7 +143,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
   }
 
   compareFn(c1: any, c2: any): boolean {
-    return c1 && c2 ? c1.roleName === c2 : c2 === c1.roleName;
+    return c1 && c2 ? c1.role === c2 : c2 === c1.role;
   }
 
   createFormRoles() {

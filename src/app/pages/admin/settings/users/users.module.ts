@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
 import { HandleError } from 'app/utils/handleErrors';
 import { UserResolver, UsersResolver } from './users.resolver';
+import { RolesService } from '../roles/roles.service';
 
 
 
@@ -30,6 +31,7 @@ import { UserResolver, UsersResolver } from './users.resolver';
   ],
   providers:[
     UsersResolver,
+    RolesService,
     UsersService,
     UserResolver,
     HandleError,
