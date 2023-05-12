@@ -95,6 +95,13 @@ export class PageComponent implements OnInit, OnDestroy {
                     icon: 'mat_outline:storefront',
                     link: 'admin/produtos/lista'
                 },
+                {
+                    id: 'categories',
+                    title: 'Categoria',
+                    type: 'basic',
+                    icon: 'mat_outline:add_moderator',
+                    link: 'admin/categorias/lista'
+                },
 
             ]
         },
