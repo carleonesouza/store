@@ -71,13 +71,13 @@ export class PageComponent implements OnInit, OnDestroy {
                     type:'collapsable',
                     icon:'mat_outline:settings',
                     children:[
-                        // {
-                        //     id: 'account',
-                        //     title: 'Conta',
-                        //     type: 'basic',
-                        //     icon: 'mat_outline:manage_accounts',
-                        //     link: 'admin/configuracoes/conta/lista'
-                        // },
+                        {
+                            id: 'account',
+                            title: 'Conta',
+                            type: 'basic',
+                            icon: 'mat_outline:manage_accounts',
+                            link: 'admin/configuracoes/conta/lista'
+                        },
                         {
                             id: 'roles',
                             title: 'Perfis',

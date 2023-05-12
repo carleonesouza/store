@@ -14,10 +14,12 @@ import { SettingsComponent } from './settings.component';
 import { settingsRoutes } from './settings.routing';
 import { MaterialAppModule } from 'material-app.module';
 import { SettingsService } from './settings.service';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
     declarations: [
-        SettingsComponent
+        SettingsComponent,
+        UsersComponent
     ],
     imports     : [
         RouterModule.forChild(settingsRoutes),

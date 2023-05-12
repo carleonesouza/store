@@ -29,7 +29,7 @@ export class RolesService {
 
 
   getAllRoles(): Observable<any[]>{
-    return this._httpClient.get<any[]>(environment.apiManager+'roles/get-all').
+    return this._httpClient.get<any[]>(environment.apiManager+'profiles').
     pipe(
       delay(500),
       tap((result) => {
@@ -43,7 +43,7 @@ export class RolesService {
 
   getRoleById(roleId: string): Observable<any>
     {
-        return this._httpClient.get(environment.apiManager + 'routes/get-by-roleid', {params: {roleId}})
+        return this._httpClient.get(environment.apiManager + 'profiles/'+roleId)
         .pipe(
           tap((result) =>{
             this._role.next(result);
@@ -65,7 +65,7 @@ export class RolesService {
 
 
   addRoles(role): Observable<any>{
-    return this._httpClient.post<any>(environment.apiManager+'roles/add-role', role)
+    return this._httpClient.post<any>(environment.apiManager+'profile', role)
     .pipe(
       tap((newRole) => {
 

@@ -9,7 +9,7 @@ import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { RolesService } from '../roles.service';
-import { Role } from 'app/models/role';
+import { Perfil } from 'app/models/perfil';
 
 @Component({
   selector: 'app-role-details',
@@ -18,20 +18,18 @@ import { Role } from 'app/models/role';
 })
 export class RoleDetailsComponent implements OnInit, OnDestroy {
 
-  @Input() roleForm: FormGroup;
+  @Input() perfilForm: FormGroup;
   @Input() checked: boolean;
   editMode: boolean = false;
   saving: boolean = false;
   title: string;
-  role: any;
+  perfil: any;
   isActive: boolean;
   creating: boolean = false;
   loading: boolean = false;
-  role$: Observable<any>;
-  routes$: Observable<any>;
-  routes: any[];
-  systems: any[];
-  systems$: Observable<any>;
+  perfil$: Observable<any>;
+  perfis$: Observable<any>;
+  perfis: any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(private _changeDetectorRef: ChangeDetectorRef,
@@ -53,42 +51,29 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
     if (this._route.snapshot.url[0].path === 'add') {
       this.creating = true;
       this.title = 'Novo Perfil';
-      this.createRoleForm();
+      this.createPerfilForm();
     }
 
     if (this._route.snapshot.paramMap.get('id') !== 'add') {
 
-      this.loading = true;
-      this.role$ = this._rolesService.role$;
+      this.perfil$ = this._rolesService.role$;
 
-      this._rolesService.role$
+      this.perfil$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((role: any) => {
+        .subscribe((perfil: any) => {
           this.loading = false;
           // Open the drawer in case it is closed
           this._listItemsComponent.matDrawer.open();
-          this.createRoleForm();
-          this.roleForm.reset();
+          this.createPerfilForm();
+          this.perfilForm.reset();
 
-          // Get the Lista
-          this.role = role['content'][0]?.role;
-          this.isActive = role['content'][0]?.isActive;
+          this.isActive = perfil?.status;
 
-          this.routes = role['content']?.map((perfils) => { if(perfils.rota){ return perfils.rota; } });
-
-          this.systems = role['content']?.map((perfils) => { if(perfils.rota){ return perfils.rota.sistema; } });
-
-          this.systems = this.getUniqueListBy(this.systems, 'name');
-
-          if (this.role) {
-            this.roleForm.patchValue({
-              roles: this.role.roleName
+          if (this.perfil) {
+            this.perfilForm.patchValue({
+              role: this.perfil.role
             });
-            this.roleForm.get('rota').patchValue({
-              route: this.routes,
-              sistema: this.systems
-            });
-            this.loading = false;
+
           }
 
           // Toggle the edit mode off
@@ -111,35 +96,21 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-  createRoleForm() {
-    this.roleForm = this._formBuilder.group({
-      roles: new FormControl('', Validators.required),
-      rota: new FormGroup({
-        recId: new FormControl(''),
-        route: new FormControl(''),
-        sistema: new FormControl('', Validators.required)
-      }),
+  createPerfilForm() {
+    this.perfilForm = this._formBuilder.group({
+      role: new FormControl('', Validators.required),
+      status: new FormControl(true)
     });
   }
 
-  createSystemForm() {
-    return new FormGroup({
-      system: new FormControl('', Validators.required),
-    });
-  }
 
   getUniqueListBy(arr, key) {
     return [...new Map(arr.map(item => [item[key], item])).values()];
 }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  get roleControls() {
-    return this.roleForm.controls;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  get systemsControls() {
-    return (this.roleForm.get('systems') as FormArray).controls;
+  get perfilControls() {
+    return this.perfilForm.controls;
   }
 
 
@@ -147,28 +118,6 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
     return c1 && c2 ? c1.recId === c2.recId : c1 === c2;
   }
 
-  addSystemField(): void {
-
-    const systemsFormArray = this._formBuilder.group({ system: [''] });
-
-    (this.roleForm.get('systems') as FormArray).push(systemsFormArray);
-    // Mark for check
-    this._changeDetectorRef.markForCheck();
-  }
-
-
-  removeSystemField(index: number): void {
-
-    // Get form array for address
-    const systemsFormArray = this.roleForm.get('systems') as FormArray;
-
-    const system = systemsFormArray.at(index);
-
-    systemsFormArray.removeAt(index);
-
-    // Mark for check
-    this._changeDetectorRef.markForCheck();
-  }
 
 
 
@@ -204,70 +153,13 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
     this.editMode = false;
   }
 
-  desativaRole(event) {
-    const ativaDesativa = this.role.isActive === true ? 'Inativar' : 'Ativar';
-    const dialogRef = this._dialog.showDialog(`${ativaDesativa} Perfil`, `Certeza que deseja ${ativaDesativa} Perfil?`,
-      this.role, event?.checked);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-          const role = new Role(result?.item);
-          role.isActive = role.isActive === true ? false : true;
-          this._rolesService.ativaDesativaRole(role)
-          .subscribe(() => {
-            this.checked = true;
-            this._router.navigate(['/admin/configuracoes/perfil/lista']);
-              this.closeDrawer();
-              this._dialog.showMessageResponse('Atualizado com Sucesso!', 'OK');
-          });
-      }else{
-        this.checked = false;
-      }
-    });
-  }
-
-  updateRole() {
-    if (this.roleForm.valid) {
-      this.saving = true;
-      const role = this.roleForm.get('roles').value;
-      const roles = [{ roleName: role }];
-      const rotas = {
-        recId: this.roleForm.get('rota').value?.route?.recId,
-        route: this.roleForm.get('rota').value?.route?.route,
-        sistema: this.roleForm.get('rota').value?.sistema
-      };
-      const newRole = new Role();
-      newRole.rota = rotas;
-      newRole.roles = roles;
-      this._rolesService.addRoles(newRole)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe(
-          () => {
-            this.saving = false;
-            this.toggleEditMode(false);
-            this.closeDrawer().then(() => true);
-            this._router.navigate(['/admin/configuracoes/perfil/lista']);
-            this._dialogMessage.showMessageResponse('Peril Alterado com Sucesso', 200);
-            this.roleForm.reset();
-          });
-    }
-  }
 
   onSubmit() {
-    if (this.roleForm.valid) {
+    if (this.perfilForm.valid) {
       this.saving = true;
-      const role = this.roleForm.get('roles').value;
-      const roles = [{ roleName: role }];
-      const rotas = {
-        recId: this.roleForm.get('rota').value?.route?.recId,
-        createdBy: this.roleForm.get('rota').value?.route?.createdBy,
-        route: this.roleForm.get('rota').value?.route?.route,
-        sistema: this.roleForm.get('rota').value?.sistema
-      };
-      const newRole = new Role();
-      newRole.rota = rotas;
-      newRole.roles = roles;
-      this._rolesService.addRoles(newRole)
+      const perfil = new Perfil(this.perfilForm.value);
+
+      this._rolesService.addRoles(perfil)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe(
           () => {
@@ -276,7 +168,7 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
             this.closeDrawer().then(() => true);
             this._router.navigate(['/admin/configuracoes/perfil/lista']);
             this._dialogMessage.showMessageResponse('Perfil Criado com Sucesso', 200);
-            this.roleForm.reset();
+            this.perfilForm.reset();
           });
     }
   }

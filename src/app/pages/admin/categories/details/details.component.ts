@@ -40,7 +40,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
      if (this._activateRoute.snapshot.url[0].path === 'add') {
       this.creating = true;
       this.title = 'Nova Categoria';
-      this.createExameForm();
+      this.createCategoryForm();
     }
 
     if (this._activateRoute.snapshot.paramMap.get('id') !== 'add') {
@@ -53,7 +53,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
           // Open the drawer in case it is closed
           this._listItemComponent.matDrawer.open();
-          this.createExameForm();
+          this.createCategoryForm();
           this.caterogyForm.reset();
           this.category = category;
           // Get the Lista
@@ -79,7 +79,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
     this._unsubscribeAll.complete();
   }
 
-  createExameForm(){
+  createCategoryForm(){
     this.caterogyForm = this._formBuilder.group({
       name: new FormControl(''),
       description: new FormControl(''),
