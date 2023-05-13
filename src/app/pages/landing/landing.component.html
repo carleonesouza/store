@@ -1,22 +1,27 @@
-<div class="flex flex-col items-center justify-center w-full h-full">
+<div class="flex flex-col items-center justify-center w-full h-full mb-5">
     <div class="w-full max-w-3xl">
         <div class="max-w-none mx-auto prose prose-sm">
             <img
                 class="w-20"
                 src="assets/images/logo/logo.svg"
                 alt="Logo image">
-            <h1>Landing Module</h1>
+            <h1>Bem-vindo ao Controle de Caixa - Plataform 🎉</h1>
             <p>
-                This can be the landing or the welcome page of your application. If you have an SSR (Server Side Rendering) setup, or if you don't need to have Search engine
-                visibility and optimizations, you can even use this page as your primary landing page.
+                Essa é uma ferramenta que foi desenvolvida para colaborar com a gestão e controle de vendas do seu negócios, além de ser uma ferramenta que vai
+                contribuir com crescimento do seu comércio, é uma aplicação que permite você, cadastrar e habilitar sua utilização para um colaborador. Permitindo 
+                ainda, verificar e realizar o controle de estoque de produtos cadastrados e vendidos de sua loja.
             </p>
             <p>
-                This is a separate "module", it has its own directory and routing setup and also it's completely separated from the actual application. This is also a simple example of
-                a multiple applications setup that uses the same codebase. You can have different entry points and essentially have different applications within the same codebase.
+                Para acesso aos recursos das plataforma é necessário obter um token. Para isso, basta adicionar seu e-mail abaixo e 
+                receberá um token em seguinda.    </p>
+                <p>  
+                Ao receber o token salve-o em um bloco de notas e/ou copie o mesmo, volte a página de cadastro e cole
+                o token na caixa API KEY, a partir daí poderá finalizar o cadastro na plataforma.
+
             </p>
         </div>
 
-        <div class="flex items-baseline mt-2 font-medium pb-5">
+        <div class="flex items-baseline mt-3 text-xl font-semibold pb-5">
             <div>Já tem uma chave pública ?</div>
             <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Sign up
             </a>

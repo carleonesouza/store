@@ -63,7 +63,6 @@ export class AuthSignUpComponent implements OnInit
     // -----------------------------------------------------------------------------------------------------
 
     validateCPF(control: AbstractControl): { [key: string]: any } | null {
-        console.log(control);
         if(control !== null){
           return cpfValida(control);
         }
