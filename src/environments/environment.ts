@@ -3,9 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    apiCad:'https://homolog-evo.eusaude.com.br/cad/api/',
-    apiList: 'https://homolog-evo.eusaude.com.br/listas/api/',
+    production: true,
     apiManager: 'https://app-loja.azurewebsites.net/v1/api/'
 };
 
