@@ -8,7 +8,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "ng build",
+        "build": "ng build --prod",
         "watch": "ng build --watch --configuration development",
         "lint": "eslint ./src/app --ext .ts",
         "lint:fix": "eslint ./src/app --ext .ts --fix"
