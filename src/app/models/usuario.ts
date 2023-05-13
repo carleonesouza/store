@@ -1,4 +1,4 @@
-import { Endereco } from './endereco';
+import { Address } from './address';
 
 export class Usuario {
 
@@ -11,7 +11,7 @@ export class Usuario {
     apiKey: string;
     status?: any;
     profile?: string;
-    address?: Endereco;
+    address?: Address;
 
     public constructor(init?: Partial<Usuario>) {
         Object.assign(this, init);

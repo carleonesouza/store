@@ -8,7 +8,7 @@ export function validaCpf(strCPF: string): boolean {
     soma = 0;
     const arrayOne = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const arrayTwo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    if (strCPF.length === 11) {
+    if (strCPF?.length === 11) {
         if (
             strCPF === '11111111111' ||
             strCPF === '22222222222' ||
@@ -49,16 +49,16 @@ export const cpfValida: ValidatorFn = (control: AbstractControl): ValidationErro
 
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-export function removemask(value): any {
+export function removemask(value: string): any {
     if(value !== null){
         return value
-        .replace(/[.]/g, '')
-        .replace(/([-])/, '')
-        .replace(/([(])/, '')
-        .replace(/([)])/, '')
-        .replace(/([ ])/, '')
-        .replace(/([/])/, '')
-        .replace(/([-])/g, '');
+        .toString().replace(/[.]/g, '')
+        .toString().replace(/([-])/, '')
+        .toString().replace(/([(])/, '')
+        .toString().replace(/([)])/, '')
+        .toString().replace(/([ ])/, '')
+        .toString().replace(/([/])/, '')
+        .toString().replace(/([-])/g, '');
     }
 }
 

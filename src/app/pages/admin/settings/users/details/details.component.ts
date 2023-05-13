@@ -2,7 +2,7 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UsersService } from '../users.service';
 import { Usuario } from 'app/models/usuario';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
@@ -13,6 +13,8 @@ import { DialogMessage } from 'app/utils/dialog-message ';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Perfil } from 'app/models/perfil';
 import { RolesService } from '../../roles/roles.service';
+import { cpfValida } from 'app/utils/validaCpf';
+import { Address } from 'app/models/address';
 
 @Component({
   selector: 'app-details',
@@ -25,7 +27,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
   displayedColumns: string[] = ['position', 'name'];
   editMode: boolean = false;
   title: string;
-  user: any;
+  user: Usuario;
   regex = /(?=.*[a-z]).*(?=[0-9]).*(?=[A-Z]).*(?=[!?*])[a-zA-Z0-9!?*#]{8,}/g;
   creating: boolean = false;
   loading: boolean = false;
@@ -83,16 +85,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
           this.user = user;
 
           if (this.user) {
-            this.userForm.patchValue({
-              email: this.user?.email,
-              fullName: this.user?.firstName,
-            });
-
-
-
-
-
-
+            this.userForm.patchValue(this.user);
             this.loading = false;
           }
 
@@ -120,13 +113,17 @@ export class DetailsComponent implements OnInit, OnDestroy{
       fullName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl(''),
-      cpfCnpj: new FormControl(''),
+      cpfCnpj: new FormControl('', [Validators.required, this.validateCPF]),
       apiKey: new FormControl(''),
       password: new FormControl(''),
       confirmPassword: new FormControl(''),
-      address: new FormControl(''),
+      address: this._formBuilder.group({
+        street: new FormControl(''),
+        zipCode: new FormControl(''),
+        neighborhood: new FormControl(''),
+        status: new FormControl(true)}),
       profile: new FormControl(''),
-      status: new FormControl('')
+      status: new FormControl(true)
     });
   }
 
@@ -134,16 +131,13 @@ export class DetailsComponent implements OnInit, OnDestroy{
     return this.userForm.controls;
   }
 
-  get rolesControls() {
-    return (this.userForm.get('roles') as FormArray).controls;
-  }
-
-  get rolesFormArray(): FormArray {
-    return this.userForm.get('roles') as FormArray;
-  }
 
   compareFn(c1: any, c2: any): boolean {
-    return c1 && c2 ? c1.role === c2 : c2 === c1.role;
+    return c1 && c2 ? c1._id === c2 : c2 === c1._id;
+  }
+
+  get userControlsForm(): { [key: string]: AbstractControl } {
+    return this.userForm.controls;
   }
 
   createFormRoles() {
@@ -152,6 +146,13 @@ export class DetailsComponent implements OnInit, OnDestroy{
     });
   }
 
+  get enderecosControls() {
+    return (this.userForm.get('endereco') as FormGroup).controls;
+  }
+
+  itemDisplayFn(item: Perfil) {
+    return item ? item.role : '';
+  }
   /**
    * Close the drawer
    */
@@ -176,6 +177,12 @@ export class DetailsComponent implements OnInit, OnDestroy{
     this._changeDetectorRef.markForCheck();
   }
 
+  validateCPF(control: AbstractControl): { [key: string]: any } | null {
+    if(control !== null){
+      return cpfValida(control);
+    }
+  }
+
   cancelEdit() {
     if (this.creating) {
       this.closeDrawer();
@@ -188,20 +195,12 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
   onSubmit() {
     if (this.userForm.valid) {
-      const userSystem = new Usuario();
+      const user = new Usuario(this.userForm.value);
       this.saving = true;
-      userSystem.email = this.userForm.value.email;
-      userSystem.fullName = this.userForm.value.fullName;
-      userSystem.password = this.userForm.value.password;
-      const userRoles = [];
-      const roles = this.userForm.get('roles').value;
-      roles.map((role) => {
-        userRoles.push(role.role.roleName);
-      });
-
-      if (userSystem && userRoles.length >= 1) {
+      user.address = new Address(this.userForm.get('address').value);
+      if (user) {
         this._usersService
-          .addUser(userSystem)
+          .addUser(user)
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe(
             () => {
@@ -209,6 +208,9 @@ export class DetailsComponent implements OnInit, OnDestroy{
               this.toggleEditMode(false);
               this.closeDrawer().then(() => true);
               this._router.navigate(['/admin/configuracoes/conta/lista']);
+               this._snackBar.open('Usuário Salvo com Sucesso','Fechar', {
+              duration: 3000
+            });
               this.userForm.reset();
             },
           );

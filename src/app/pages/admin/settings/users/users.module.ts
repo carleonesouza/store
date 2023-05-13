@@ -13,20 +13,24 @@ import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
 import { HandleError } from 'app/utils/handleErrors';
 import { UserResolver, UsersResolver } from './users.resolver';
 import { RolesService } from '../roles/roles.service';
+import { NgxMaskModule } from 'ngx-mask';
+import { DirectiveModule } from 'app/directives/directive.module';
 
 
 
 @NgModule({
   declarations: [
     ListComponent,
-    DetailsComponent
+    DetailsComponent,
   ],
   imports: [
     CommonModule,
     UsersRoutingModule,
     HttpClientModule,
     SharedModule,
+    DirectiveModule,
     MaterialAppModule,
+    NgxMaskModule.forChild(),
     CurrencyMaskModule
   ],
   providers:[

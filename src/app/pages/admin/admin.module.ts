@@ -14,11 +14,10 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { AdminComponent } from './admin.component';
 import { CategoriesComponent } from './categories/categories.component';
 
-
 @NgModule({
   declarations: [
     AdminComponent,
-    CategoriesComponent
+    CategoriesComponent,
   ],
   imports: [
     CommonModule,

@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 import { Usuario } from 'app/models/usuario';
+import { cpfValida } from 'app/utils/validaCpf';
 
 @Component({
     selector     : 'auth-sign-up',
@@ -46,7 +47,7 @@ export class AuthSignUpComponent implements OnInit
         // Create the form
         this.signUpForm = this._formBuilder.group({
             fullName: ['', Validators.required],
-            cpfCnpj: ['', [Validators.required]],
+            cpfCnpj: ['', [Validators.required, this.validateCPF]],
                 phone: ['', [Validators.required]],
                 email: ['', [Validators.required, Validators.email]],
                 apikey: ['', [Validators.required]],
@@ -60,6 +61,13 @@ export class AuthSignUpComponent implements OnInit
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+
+    validateCPF(control: AbstractControl): { [key: string]: any } | null {
+        console.log(control);
+        if(control !== null){
+          return cpfValida(control);
+        }
+      }
 
     /**
      * Sign up

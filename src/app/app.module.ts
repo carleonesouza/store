@@ -6,7 +6,6 @@ import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { FuseModule } from '@fuse';
 import { FuseConfigModule } from '@fuse/services/config';
-import { FuseMockApiModule } from '@fuse/lib/mock-api';
 import { CoreModule } from 'app/core/core.module';
 import { appConfig } from 'app/core/config/app.config';
 import { LayoutModule } from 'app/layout/layout.module';
@@ -17,6 +16,7 @@ import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { MaterialAppModule } from 'material-app.module';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { DirectiveModule } from './directives/directive.module';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -39,6 +39,7 @@ const routerConfig: ExtraOptions = {
 
           //Shared Module
           SharedModule,
+          DirectiveModule,
 
 
         // Core module of your application

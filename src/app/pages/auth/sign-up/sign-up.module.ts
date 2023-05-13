@@ -11,15 +11,13 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
 import { AuthSignUpComponent } from 'app/pages/auth/sign-up/sign-up.component';
 import { authSignupRoutes } from 'app/pages/auth/sign-up/sign-up.routing';
-import { CpfValidatorDirective } from 'app/cpf-validator.directive';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 
 const maskConfig: Partial<IConfig> = { validation: false};
 
 @NgModule({
     declarations: [
-        AuthSignUpComponent,
-        CpfValidatorDirective
+        AuthSignUpComponent
     ],
     imports     : [
         RouterModule.forChild(authSignupRoutes),

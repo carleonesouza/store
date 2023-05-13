@@ -18,7 +18,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { Error404Component } from './error/error-404/error-404.component';
 import { Error401Component } from './error/error-401/error-401.component';
 import { Error500Component } from './error/error-500/error-500.component';
-import { ConfirmEqualValidatorDirective } from 'app/confirm-equal-validator.directive';
 import { AddIdentificadorComponent } from './add-identificador/add-identificador.component';
 import { DialogAssociateComponent } from './dialog-association/dialog-associate.component';
 import { MatSnackBarComponent } from './mat-snack-bar/mat-snack-bar.component';
@@ -69,12 +68,9 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
         Error404Component,
         Error500Component,
         Error401Component,
-        ConfirmEqualValidatorDirective,
         AddIdentificadorComponent,
         DialogAssociateComponent,
         MatSnackBarComponent,
-
-        //IndividuoProgramaSaudeComponent
     ],
     declarations:[
         LogoComponent,
@@ -84,11 +80,9 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
         Error500Component,
         Error401Component,
         ListItemsComponent,
-        ConfirmEqualValidatorDirective,
         AddIdentificadorComponent,
         DialogAssociateComponent,
         MatSnackBarComponent,
-        //IndividuoProgramaSaudeComponent
     ],
     providers:[
         { provide: MAT_DATE_LOCALE, useValue: 'pt-br' },{
