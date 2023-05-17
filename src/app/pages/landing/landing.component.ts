@@ -7,13 +7,14 @@ import { AuthService } from 'app/core/auth/auth.service';
 @Component({
     selector     : 'landing-home',
     templateUrl  : './landing.component.html',
+    styleUrls    : ['./landing.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 export class LandingHomeComponent implements OnInit{
 
 
     @ViewChild('signatureNgForm') signatureNgForm: NgForm;
-
+    apiToken;
     alert: { type: FuseAlertType; message: string } = {
         type   : 'success',
         message: ''
@@ -76,6 +77,7 @@ export class LandingHomeComponent implements OnInit{
                 this.signatureForm.patchValue({
                     apikey: response.public_api_key
                 });
+                this.apiToken = response.public_api_key;
                 this.loading = false;
 
               },

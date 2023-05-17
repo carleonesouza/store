@@ -165,7 +165,7 @@
                             <!-- Current statement -->
                             <div
                                 class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden"
-                                *ngIf="caixaYesterday$ | async as caixaYesterday; else noCaixa">
+                                *ngIf="caixaYesterday$ | async as caixaYesterday">
                                 <div class="absolute bottom-0 right-0 w-24 h-24 -m-6">
                                     <mat-icon class="icon-size-24 opacity-25 text-red-500 dark:text-red-400"
                                         [svgIcon]="'heroicons_outline:exclamation-circle'"></mat-icon>

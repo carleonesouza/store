@@ -97,7 +97,7 @@ export class StoreService {
   }
 
   closeCaixaDay(id: string, caixa: Caixa){
-    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/'+ id, {caixa})
+    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/'+ id, caixa)
       .pipe(
         tap((result) => {
           console.log(result);

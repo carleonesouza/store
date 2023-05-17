@@ -23,7 +23,7 @@
 
         <div class="flex items-baseline mt-3 text-xl font-semibold pb-5">
             <div>Já tem uma chave pública ?</div>
-            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Sign up
+            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Cadastrar
             </a>
         </div>
         <div class="flex mt-5">
@@ -43,10 +43,14 @@
                 </mat-form-field>
 
                 <mat-form-field class="w-full">
-                    <mat-label>API KEY</mat-label>
+                    <mat-label>Api Key</mat-label>
                     <input id="apikey" matInput [formControlName]="'apikey'" disabled />
-                    <mat-icon class="icon-size-5" matPrefix  [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                    <mat-icon class="icon-size-5" matPrefix  [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>     
+                    <button mat-button matSuffix mat-flat-button  [cdkCopyToClipboard]="apiToken"  class="rounded-none" matTooltip="Copiar" aria-label="copy">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>              
                 </mat-form-field>
+            
 
                  <!-- Submit button -->
                  <button class="fuse-mat-button-medium w-50 mt-6" mat-flat-button [color]="'primary'"

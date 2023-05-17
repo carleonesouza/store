@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { FuseCardModule } from '@fuse/components/card';
+import { MaterialAppModule } from 'material-app.module';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 
 
@@ -22,7 +24,9 @@ import { FuseCardModule } from '@fuse/components/card';
         RouterModule.forChild(landingHomeRoutes),
         MatButtonModule,
         MatIconModule,
+        ClipboardModule,
         SharedModule,
+        MaterialAppModule,
         MatButtonModule,
         MatCheckboxModule,
         MatFormFieldModule,

@@ -10,11 +10,11 @@
 
             <!-- Title -->
             <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">
-                Sign up
+               Cadastrar
             </div>
             <div class="flex items-baseline mt-0.5 font-medium pb-5">
                 <div>Já tem uma conta?</div>
-                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-in']">Sign in
+                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-in']">Realizar Login
                 </a>
                 
                 <div class="flex ml-2">Obter chave pública </div>
@@ -43,6 +43,7 @@
                 <!-- CPF field -->
                 <div class="flex">
                     <mat-form-field class="flex-auto w-50 mr-5">
+                        <mat-label>CPF</mat-label>
                         <input matInput [placeholder]="'CPF'" matInput [formControlName]="'cpfCnpj'" [spellcheck]="false"
                             mask="000.000.000-00" appCpfValidator />
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:identification'"></mat-icon>
@@ -54,6 +55,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="flex-auto w-50">
+                        <mat-label>Telefone</mat-label>
                         <input matInput [placeholder]="'Telefone'" matInput [formControlName]="'phone'"
                             mask="(00) 0 0000-0000" />
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:phone'"></mat-icon>
@@ -110,11 +112,11 @@
                 <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5 pt-4">
                     <mat-checkbox [color]="'primary'" [formControlName]="'agreements'">
-                        <span>I agree to the</span>
-                        <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Terms of Service
+                        <span>Eu concordo com os</span>
+                        <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Termos de Serviço
                         </a>
-                        <span>and</span>
-                        <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Privacy Policy
+                        <span>e a</span>
+                        <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">Política de Privacidade
                         </a>
                     </mat-checkbox>
                 </div>
