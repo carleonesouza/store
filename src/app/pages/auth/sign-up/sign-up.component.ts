@@ -81,8 +81,6 @@ export class AuthSignUpComponent implements OnInit
 
         const user = new Usuario(this.signUpForm.value);
 
-        console.log(user);
-
       // Disable the form
       this.signUpForm.disable();
 
