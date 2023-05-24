@@ -20,6 +20,7 @@ import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
 import { HomeComponent } from './home/home.component';
 import { PageComponent } from './page.component';
 import { PagesService } from './pages.service';
+import { PagesResolver } from './pages.resolver';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -64,6 +65,6 @@ const maskConfig: Partial<IConfig> = { validation: false};
         monthYearA11yLabel: 'MMMM YYYY',
       }
     }
-  }, PagesService,  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}]
+  }, PagesService, PagesResolver,  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}]
 })
 export class PagesModule { }

@@ -23,6 +23,7 @@ import { FuseDrawerModule } from '@fuse/components/drawer';
 import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
 import { StoreResolver } from './store.resolve';
 import { MatSnackBarComponent } from 'app/shared/mat-snack-bar/mat-snack-bar.component';
+import { ReportsComponent } from '../reports/reports.component';
 
 
 export const customCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -40,7 +41,8 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
     StoreComponent,
     VendasComponent,
     CaixaComponent,
-    CaixaDetailsComponent
+    CaixaDetailsComponent,
+    ReportsComponent
   ],
   imports: [
     HttpClientModule,

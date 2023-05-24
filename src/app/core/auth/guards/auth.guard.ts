@@ -45,16 +45,18 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
                 // role not authorised so redirect to home page
                 this._router.navigate(['401-unauthorized']);
-                this._authService.signOut();
+                this._check();
                 return false;
             }
+
+            this._authService.isLoggerIn = true;
 
             // authorised so return true
             return true;
         }
 
         // not logged in so redirect to login page with the return url
-        this._authService.signOut();
+        this._check();
         return false;
     }
 
@@ -65,7 +67,6 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
      * @param segments
      */
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-
         return this._check();
     }
 

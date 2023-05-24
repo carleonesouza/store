@@ -68,6 +68,7 @@ export class RoleDetailsComponent implements OnInit, OnDestroy {
           this.perfilForm.reset();
 
           this.isActive = perfil?.status;
+          this.perfil = perfil;
 
           if (this.perfil) {
             this.perfilForm.patchValue({

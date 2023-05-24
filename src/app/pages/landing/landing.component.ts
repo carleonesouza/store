@@ -91,7 +91,7 @@ export class LandingHomeComponent implements OnInit{
                   // Set the alert
                   this.alert = {
                       type   : 'error',
-                      message: 'Something went wrong, please try again.'
+                      message: response.error.message
                   };
 
                   // Show the alert

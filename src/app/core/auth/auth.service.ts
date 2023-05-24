@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, of, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { environment } from 'environments/environment';
 import { Usuario } from 'app/models/usuario';
@@ -10,6 +10,7 @@ import { Usuario } from 'app/models/usuario';
 export class AuthService {
     private _authenticated: boolean = false;
     private _user: ReplaySubject<Usuario> = new ReplaySubject<Usuario>(1);
+    private _isLoggerIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     /**
      * Constructor
@@ -32,6 +33,14 @@ export class AuthService {
 
     get accessToken(): string {
         return localStorage.getItem('accessToken');
+    }
+
+    get isLoggedIn$(): Observable<boolean> {
+        return this._isLoggerIn.asObservable();
+    };
+
+    set isLoggerIn(value){
+        this._isLoggerIn.next(value);
     }
 
         /**
@@ -68,8 +77,25 @@ export class AuthService {
      *
      * @param password
      */
-    resetPassword(password: string): Observable<any> {
-        return of();
+    resetPassword(id: string, user: Usuario): Observable<any> {
+        return this._httpClient.post(environment.apiManager + 'reset-pwd'+id, user).pipe(
+            switchMap((response: any) => {
+
+                // Store the access token in the local storage
+                this.accessToken = response.accessToken;
+
+                // Set the authenticated flag to true
+                this._authenticated = true;
+                this.isLoggerIn = true;
+
+                // Store the user on the user service
+                this.user = response.user;
+                localStorage.setItem('user', JSON.stringify(response.user));
+
+                // Return a new observable with the response
+                return of(response);
+            })
+        );
     }
 
     /**
@@ -91,6 +117,7 @@ export class AuthService {
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
+                this.isLoggerIn = true;
 
                 // Store the user on the user service
                 this.user = response.user;
@@ -109,10 +136,16 @@ export class AuthService {
         if (this.accessToken) {
             // Set the authenticated flag to true
             this._authenticated = true;
+
+            this.isLoggerIn = true;
+
             // Return true
             return of(true);
         } else {
             this._authenticated = false;
+
+            this.isLoggerIn = false;
+
             // Return true
             return of(false);
 
@@ -126,11 +159,17 @@ export class AuthService {
     signOut(): Observable<any> {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
+
+        // Remove the access user from the local storage
         localStorage.removeItem('user');
+
+        // Remove the access caixaId from the local storage
         localStorage.removeItem('caixaId');
 
         // Set the authenticated flag to false
         this._authenticated = false;
+
+        this.isLoggerIn = false;
 
         // Return the observable
         return of(false);
@@ -150,6 +189,7 @@ export class AuthService {
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
+                this.isLoggerIn = true;
 
                 // Store the user on the user service
                 this.user = response.user;
@@ -167,33 +207,25 @@ export class AuthService {
         );
     }
 
-    /**
-     * Unlock session
-     *
-     * @param credentials
-     */
-    unlockSession(credentials: { email: string; password: string }): Observable<any> {
-        return this._httpClient.post('api/auth/unlock-session', credentials);
-    }
 
     /**
      * Check the authentication status
      */
     check(): Observable<boolean> {
         // Check if the user is logged in
-        if (this._authenticated) {
-            return of(true);
+        if (!this._authenticated) {
+
+            return of(false);
         }
 
         // Check the access token availability
-        if (!this.accessToken) {
-            this.signOut();
-            return of(false);
+        if (this.accessToken) {
+            this.isLoggerIn = true;
+            return of(true);
         }
 
         // Check the access token expire date
         if (AuthUtils.isTokenExpired(this.accessToken)) {
-            this.signOut();
             return of(false);
         }
 

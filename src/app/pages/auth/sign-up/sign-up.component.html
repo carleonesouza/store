@@ -1,36 +1,38 @@
 <div
-    class="flex flex-col sm:flex-row items-center md:items-center sm:justify-center md:justify-center flex-auto min-w-0">
+    class="flex flex-col sm:flex-row items-center md:items-center sm:justify-center md:justify-center flex-auto min-w-0 h-full m-4">
     <div
-        class="md:flex md:items-center md:justify-center w-full sm:w-auto md:w-auto md:h-full py-4 px-4 sm:p-12 md:p-10 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        class="md:flex md:items-center md:justify-center w-full sm:w-auto md:w-auto md:h-full py-4 px-4 sm:p-12 md:p-10 sm:rounded-2xl  sm:shadow sm:bg-card">
+
         <div class="w-full mx-auto sm:mx-0">
-            <!-- Logo -->
+
             <div class="w-12">
                 <img src="assets/images/logo/logo.svg" />
             </div>
 
-            <!-- Title -->
             <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">
-               Cadastrar
+                Cadastrar
             </div>
-            <div class="flex items-baseline mt-0.5 font-medium pb-5">
-                <div>Já tem uma conta?</div>
-                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-in']">Realizar Login
-                </a>
-                
-                <div class="flex ml-2">Obter chave pública </div>
-                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/home']">API KEY
-                </a>
+            <div class="flex flex-col sm:flex-row sm:w-full items-baseline mt-0.5 font-medium pb-5">
+                <div class="md:w-80 sm:w-full">
+                    Já tem uma conta? <a class="text-primary-500 hover:underline" [routerLink]="['/sign-in']">Fazer Login
+                    </a>.
+                </div>
+
+                <div class="md:w-full sm:w-full">
+                    Para realizar o cadastro é necessário <a class="ml-1 text-primary-500 hover:underline"
+                        [routerLink]="['/home']">Obter chave pública
+                    </a>
+                </div>
+
             </div>
 
-            <!-- Alert -->
             <fuse-alert class="mt-8 mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
                 [type]="alert.type" [@shake]="alert.type === 'error'">
                 {{ alert.message }}
             </fuse-alert>
 
-            <!-- Sign Up form -->
             <form class="w-full" [formGroup]="signUpForm">
-                <!-- Name field -->
+
                 <mat-form-field class="w-full">
                     <mat-label>Nome Completo</mat-label>
                     <input id="fullName" matInput [formControlName]="'fullName'" />
@@ -40,12 +42,11 @@
                     </mat-error>
                 </mat-form-field>
 
-                <!-- CPF field -->
-                <div class="flex">
-                    <mat-form-field class="flex-auto w-50 mr-5">
+                <div class="flex flex-col sm:flex-row md:w-full md:space-x-4 sm:space-x-0 sm:w-full">
+                    <mat-form-field class="flex-auto w-auto md:w-full sm:w-full">
                         <mat-label>CPF</mat-label>
-                        <input matInput [placeholder]="'CPF'" matInput [formControlName]="'cpfCnpj'" [spellcheck]="false"
-                            mask="000.000.000-00" appCpfValidator />
+                        <input matInput [placeholder]="'CPF'" matInput [formControlName]="'cpfCnpj'"
+                            [spellcheck]="false" mask="000.000.000-00" appCpfValidator />
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:identification'"></mat-icon>
                         <mat-error
                             *ngIf="signUpForm.get('cpfCnpj').hasError('valido') && (signUpForm.touched || signUpForm.dirty)"
@@ -54,7 +55,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field class="flex-auto w-50">
+                    <mat-form-field class="flex-auto w-auto md:w-full sm:w-full">
                         <mat-label>Telefone</mat-label>
                         <input matInput [placeholder]="'Telefone'" matInput [formControlName]="'phone'"
                             mask="(00) 0 0000-0000" />
@@ -65,7 +66,6 @@
                     </mat-form-field>
                 </div>
 
-                <!-- Email field -->
                 <mat-form-field class="w-full">
                     <mat-label>E-mail</mat-label>
                     <input id="email" matInput [formControlName]="'email'" />
@@ -80,14 +80,12 @@
 
                 <mat-form-field class="w-full">
                     <mat-label>API KEY</mat-label>
-                    <input id="apikey" matInput [formControlName]="'apikey'" />
+                    <input id="apiKey" matInput [formControlName]="'apiKey'" />
                     <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
-                    <mat-error *ngIf="signUpForm.get('apikey').hasError('required')">
+                    <mat-error *ngIf="signUpForm.get('apiKey').hasError('required')">
                         API KEY é obrigatório
                     </mat-error>
                 </mat-form-field>
-
-                <!-- Password field -->
 
                 <div class="flex">
                     <mat-form-field class="w-full">
@@ -106,10 +104,8 @@
                         </button>
                         <mat-error> Senha é obrigatório </mat-error>
                     </mat-form-field>
-
                 </div>
 
-                <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5 pt-4">
                     <mat-checkbox [color]="'primary'" [formControlName]="'agreements'">
                         <span>Eu concordo com os</span>
@@ -121,9 +117,8 @@
                     </mat-checkbox>
                 </div>
 
-                <!-- Submit button -->
                 <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
-                    [disabled]="signUpForm.invalid"  (click)="signUp()">
+                    [disabled]="signUpForm.invalid" (click)="signUp()">
                     <span *ngIf="!signUpForm.invalid">
                         Cadastrar
                     </span>

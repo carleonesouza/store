@@ -50,7 +50,7 @@ export class AuthSignUpComponent implements OnInit
             cpfCnpj: ['', [Validators.required, this.validateCPF]],
                 phone: ['', [Validators.required]],
                 email: ['', [Validators.required, Validators.email]],
-                apikey: ['', [Validators.required]],
+                apiKey: ['', [Validators.required]],
                 password: ['', Validators.required],
                 agreements: ['', Validators.required],
             }

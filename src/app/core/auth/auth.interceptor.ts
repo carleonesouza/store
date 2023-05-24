@@ -3,6 +3,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor
@@ -10,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor
     /**
      * Constructor
      */
-    constructor(private _authService: AuthService)
+    constructor(private _authService: AuthService,   private _router: Router)
     {
     }
 
@@ -47,10 +48,11 @@ export class AuthInterceptor implements HttpInterceptor
                 if ( error instanceof HttpErrorResponse && error.status === 401 || error.status === 403 )
                 {
                     // Sign out
-                    this._authService.signOut();
+                    //this._authService.signOut();
+                    this._router.navigate(['401-unauthorized']);
 
                     // Reload the app
-                    location.reload();
+                    //location.reload();
                 }
 
                 return throwError(error);

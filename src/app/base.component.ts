@@ -14,7 +14,6 @@ export class BaseComponent implements OnInit {
 
    ngOnInit(): void {
      if(this.authService.check()){
-        console.log('Aqui');
         this.router.navigate(['/inicio']);
      }else{
       this.authService.signOut();

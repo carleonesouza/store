@@ -1,7 +1,7 @@
 export class Perfil {
 
     _iid?: string;
-    role: any;
+    role: string;
     status: boolean;
 
     public constructor(init?: Partial<Perfil>) {

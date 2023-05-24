@@ -30,6 +30,7 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
                         "allowedCommonJsDependencies": [
+                            "lodash",
                             "apexcharts",
                             "highlight.js",
                             "crypto-js/enc-utf8",
@@ -57,7 +58,8 @@
                             "src/styles/vendors.scss",
                             "src/@fuse/styles/main.scss",
                             "src/styles/styles.scss",
-                            "src/styles/tailwind.scss"
+                            "src/styles/tailwind.scss",
+                            "./node_modules/swagger-ui/dist/swagger-ui.css"
                         ],
                         "scripts": []
                     },

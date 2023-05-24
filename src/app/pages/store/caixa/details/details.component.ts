@@ -208,7 +208,7 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
                     () => {
                         this.toggleEditMode(false);
                         this.closeDrawer().then(() => true);
-                        this._router.navigate(['../']);
+                        this._router.navigate(['./inicio']);
                         this._snackBar.open('Caixa Fechado com Sucesso!', 'Fechar', {
                             duration: 3000
                         });
@@ -233,7 +233,7 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
                     () => {
                         this.toggleEditMode(false);
                         this.closeDrawer().then(() => true);
-                        this._router.navigate(['../']);
+                        this._router.navigate(['./inicio']);
                         this._snackBar.open('Caixa Aberto com Sucesso!', 'Fechar', {
                             duration: 3000
                         });

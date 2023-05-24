@@ -1,68 +1,77 @@
-<div class="flex flex-col items-center justify-center w-full h-full mb-5">
-    <div class="w-full max-w-3xl">
-        <div class="max-w-none mx-auto prose prose-sm">
-            <img
-                class="w-20"
-                src="assets/images/logo/logo.svg"
-                alt="Logo image">
-            <h1>Bem-vindo ao Controle de Caixa - Plataform 🎉</h1>
-            <p>
-                Essa é uma ferramenta que foi desenvolvida para colaborar com a gestão e controle de vendas do seu negócios, além de ser uma ferramenta que vai
-                contribuir com crescimento do seu comércio, é uma aplicação que permite você, cadastrar e habilitar sua utilização para um colaborador. Permitindo 
-                ainda, verificar e realizar o controle de estoque de produtos cadastrados e vendidos de sua loja.
-            </p>
-            <p>
-                Para acesso aos recursos das plataforma é necessário obter um token. Para isso, basta adicionar seu e-mail abaixo e 
-                receberá um token em seguinda.    </p>
-                <p>  
-                Ao receber o token salve-o em um bloco de notas e/ou copie o mesmo, volte a página de cadastro e cole
-                o token na caixa API KEY, a partir daí poderá finalizar o cadastro na plataforma.
+    <div class="flex flex-col items-center justify-center w-full mt-5">
+        <div class="max-w-3xl">
+            <div class="max-w-none mx-auto prose prose-sm">
+                <img class="w-20 h-20" src="assets/images/logo/logo.svg" alt="Logo image">
+                <h1>Bem-vindo ao Controle de Caixa - Plataform 🎉</h1>
+                <p>
+                    Essa é uma ferramenta que foi desenvolvida para colaborar com a gestão e controle de vendas do seu
+                    negócios, além de ser uma ferramenta que vai
+                    contribuir com crescimento do seu comércio, é uma aplicação que permite você, cadastrar e habilitar
+                    sua utilização para um colaborador. Permitindo
+                    ainda, verificar e realizar o controle de estoque de produtos cadastrados e vendidos de sua loja.
+                </p>
+                <p>
+                    Para acesso aos recursos das plataforma é necessário obter um token. Para isso, basta adicionar seu
+                    e-mail abaixo e
+                    receberá um token em seguinda. </p>
+                <p>
+                    Ao receber o token salve-o em um bloco de notas e/ou copie o mesmo, volte a página de cadastro e
+                    cole
+                    o token na caixa API KEY, a partir daí poderá finalizar o cadastro na plataforma.
 
-            </p>
-        </div>
+                </p>
+            </div>
 
-        <div class="flex items-baseline mt-3 text-xl font-semibold pb-5">
-            <div>Já tem uma chave pública ?</div>
-            <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Cadastrar
-            </a>
-        </div>
-        <div class="flex mt-5">
+            <div class="flex items-baseline mt-3 text-xl font-semibold pb-5">
+                <div>Já tem uma chave pública ?</div>
+                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Cadastrar
+                </a>
+            </div>
 
-            <form class="w-full" [formGroup]="signatureForm">
-                 <!-- Email field -->
-                 <mat-form-field class="w-full">
-                    <mat-label>E-mail</mat-label>
-                    <input id="email" matInput [formControlName]="'email'" />
-                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:mail'"></mat-icon>
-                    <mat-error *ngIf="signatureForm.get('email').hasError('required')">
-                        Email é obrigatório
-                    </mat-error>
-                    <mat-error *ngIf="signatureForm.get('email').hasError('email')">
-                        Por favor digite um e-mail válido
-                    </mat-error>
-                </mat-form-field>
 
-                <mat-form-field class="w-full">
-                    <mat-label>Api Key</mat-label>
-                    <input id="apikey" matInput [formControlName]="'apikey'" disabled />
-                    <mat-icon class="icon-size-5" matPrefix  [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>     
-                    <button mat-button matSuffix mat-flat-button  [cdkCopyToClipboard]="apiToken"  class="rounded-none" matTooltip="Copiar" aria-label="copy">
-                        <mat-icon>content_copy</mat-icon>
-                    </button>              
-                </mat-form-field>
-            
+            <!-- Alert -->
+            <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type" [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </fuse-alert>
+            <div class="flex mt-5 md:mb-9 sm:m-3">
 
-                 <!-- Submit button -->
-                 <button class="fuse-mat-button-medium w-50 mt-6" mat-flat-button [color]="'primary'"
-                 [disabled]="signatureForm.invalid"  (click)="obterKey()">
-                 <span *ngIf="!signatureForm.invalid">
-                     Obter chave pública
-                 </span>
-                 <mat-progress-spinner class="ml-2 mr-3" *ngIf="loading" [diameter]="24"
-                     [mode]="'indeterminate'"></mat-progress-spinner>
-             </button>
-            </form>
-        
+                <form class="w-full" [formGroup]="signatureForm">
+                    <!-- Email field -->
+                    <mat-form-field class="w-full">
+                        <mat-label>E-mail</mat-label>
+                        <input id="email" matInput [formControlName]="'email'" />
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                        <mat-error *ngIf="signatureForm.get('email').hasError('required')">
+                            Email é obrigatório
+                        </mat-error>
+                        <mat-error *ngIf="signatureForm.get('email').hasError('email')">
+                            Por favor digite um e-mail válido
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full" [ngClass]="'apikey'">
+                        <mat-label>Api Key</mat-label>
+                        <input id="apikey" matInput [formControlName]="'apikey'" disabled />
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                        <button mat-button matSuffix mat-flat-button [cdkCopyToClipboard]="apiToken"
+                            class="rounded-none" matTooltip="Copiar" aria-label="copy">
+                            <mat-icon>content_copy</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+
+                    <!-- Submit button -->
+                    <button class="fuse-mat-button-medium w-50 mt-6" mat-flat-button [color]="'primary'"
+                        [disabled]="signatureForm.invalid" (click)="obterKey()">
+                        <span *ngIf="!signatureForm.invalid">
+                            Obter chave pública
+                        </span>
+                        <mat-progress-spinner class="ml-2 mr-3" *ngIf="loading" [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
+                    </button>
+                </form>
+
+            </div>
         </div>
     </div>
-</div>

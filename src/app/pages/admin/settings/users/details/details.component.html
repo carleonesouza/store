@@ -90,6 +90,21 @@
                         </div>
                     </ng-container>
 
+                      <!-- Role -->
+                      <ng-container>
+                        <div class="flex w-full mb-4  mt-4 pb-3">
+                            <div class="min-w-0 space-y-1 w-full">
+                                <ng-container>
+                                    <div
+                                        class="flex items-center leading-6 w-full p-3 border-4 border-light-blue-500 border-opacity-75 rounded-lg">
+                                        <mat-icon class="mr-2" svgIcon="mat_outline:admin_panel_settings"></mat-icon>
+                                        <div class="font-mono">{{user.profile.role }}</div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+
                     <div class="mt-6 w-full">
                         <h3 class="text-3xl">Documentos </h3>
                     </div>
@@ -388,7 +403,7 @@
 
                         <!-- Inativar -->
                         <mat-slide-toggle *ngIf="editMode" class="mt-2" [color]="'warn'" [checked]="useDefault"
-                            (change)="desativaAccount($event)" [matTooltip]="'Inativar'">Inativar
+                            (change)="removerUser()" [matTooltip]="'Remover Usuário'">Remover
                         </mat-slide-toggle>
 
                         <!-- Cancel -->

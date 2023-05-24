@@ -5,7 +5,7 @@ import { LayoutComponent } from 'app/layout/layout.component';
 import { CaixaDetailsComponent } from './caixa/details/details.component';
 import { CanDeactivateCaixaDetails } from './store.guards';
 import { NgModule } from '@angular/core';
-import { StoreResolver } from './store.resolve';
+import { ReportsComponent } from '../reports/reports.component';
 
 
 export const storeRoutes: Route[] = [
@@ -33,6 +33,10 @@ export const storeRoutes: Route[] = [
                 component: VendasComponent
 
             },
+            {
+                path: 'reports',
+                component: ReportsComponent
+            }
 
         ]
     },

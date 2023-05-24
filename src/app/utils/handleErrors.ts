@@ -46,7 +46,6 @@ export class HandleError {
       } else if (handle.status === 401 || handle.status === 403) {
         errorMenssage = { message: handle.error.message, status: handle.status, operation: operation };
         console.log(errorMenssage);
-        this.router.navigate(['401-unauthorized']);
 
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
@@ -75,7 +74,7 @@ export class HandleError {
         this.dialog.open(ConfirmationDialogComponent, {
           width: 'auto',
           data: {
-            title: 'Ocorreu um erro!', message: handle.error,
+            title: 'Ocorreu um erro!', message: handle.error.message,
             confirm: false, recId: operation, status: handle.status
           },
         });

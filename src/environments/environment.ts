@@ -4,7 +4,8 @@
 
 export const environment = {
     production: true,
-    apiManager: 'https://app-loja.azurewebsites.net/v1/api/'
+    apiManager: 'http://localhost:8080/v1/api/',
+    apiDocs: 'http://localhost:8080/'
 };
 
 /*

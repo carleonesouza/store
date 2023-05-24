@@ -1,0 +1,15 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+@media (max-width: 820px) {
+    .text-area {
+        padding: 2rem;
+    }
+}
+
+.avatar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

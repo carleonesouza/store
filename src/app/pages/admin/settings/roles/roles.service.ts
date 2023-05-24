@@ -33,7 +33,7 @@ export class RolesService {
     pipe(
       delay(500),
       tap((result) => {
-        result = result.sort((a, b) => a.roleName.localeCompare(b.roleName));
+        result = result.sort((a, b) => a.role.localeCompare(b.role));
         this._roles.next(result);
       }),
       catchError(this.error.handleError<any[]>('getAllRoles'))
@@ -52,8 +52,8 @@ export class RolesService {
         );
     }
 
-    ativaDesativaRole(role): Observable<any>{
-      return this._httpClient.patch(environment.apiManager +'roles/ativa-desativa', role)
+    ativaDesativaRole(role, roleId): Observable<any>{
+      return this._httpClient.put(environment.apiManager +'profiles/'+roleId, role)
       .pipe(
         tap((result) =>{
           console.log(result);
@@ -65,7 +65,7 @@ export class RolesService {
 
 
   addRoles(role): Observable<any>{
-    return this._httpClient.post<any>(environment.apiManager+'profile', role)
+    return this._httpClient.post<any>(environment.apiManager+'profiles', role)
     .pipe(
       tap((newRole) => {
 

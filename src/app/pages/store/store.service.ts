@@ -36,45 +36,54 @@ export class StoreService {
 
 
   getCaixas(page = 0, size = 10): Observable<Caixa[]> {
-    return this._httpClient.get<Caixa[]>(environment.apiManager + 'cashies', { params: { page, size } })
-      .pipe(
-        take(1),
-        tap((result) => {
-          this._caixas.next(result);
-        }),
-        catchError(this.error.handleError<Caixa[]>('getCaixas'))
-      );
+    try {
+      return this._httpClient.get<Caixa[]>(environment.apiManager + 'cashies', { params: { page, size } })
+        .pipe(
+          take(1),
+          tap((result) => {
+            this._caixas.next(result);
+          }),
+        );
+    } catch (err) {
+      this.error.handleError<Caixa>('getCaixaById');
+    }
   }
 
   getCaixaToday(id: string, date: string): Observable<Caixa> {
-    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/day/' + id, {date})
-      .pipe(
-        tap((result) =>{
-          localStorage.setItem('caixaId',result._id);
-            //result.criadoEm  = _moment(result.criadoEm).format('L');
-        }),
-        catchError(this.error.handleError<Caixa>('getCaixas')));
+    try {
+      return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/day/' + id, { date })
+        .pipe(
+          tap((result) => {
+            localStorage.setItem('caixaId', result._id);
+          })
+        );
+    } catch (err) {
+      this.error.handleError<Caixa>('getCaixaById');
+    }
   }
 
   getCaixaById(id: string) {
-    return this._httpClient.get<Caixa>(environment.apiManager + 'cashies/' + id)
-      .pipe(
-        first(),
-        tap((caixa) => {
-          this._caixa.next(caixa);
-          return caixa;
-        }),
-        catchError(this.error.handleError<Caixa>('getCaixaById'))
-      );
+    try {
+      return this._httpClient.get<Caixa>(environment.apiManager + 'cashies/' + id)
+        .pipe(
+          first(),
+          tap((caixa) => {
+            this._caixa.next(caixa);
+            return caixa;
+          }),
+        );
+    } catch (err) {
+      this.error.handleError<Caixa>('getCaixaById');
+    }
   }
 
-  getCaixaYestarday(id: string, date: string): Observable<Caixa>{
-    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/yesterday/' + id, {date})
-    .pipe(
-      tap((result) =>{
-          //result.criadoEm  = _moment(result.criadoEm).format('L');
-      }),
-      catchError(this.error.handleError<Caixa>('getCaixaYestarday')));
+  getCaixaYestarday(id: string, date: string): Observable<Caixa> {
+    try {
+      return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/yesterday/' + id, { date })
+        .pipe();
+    } catch (err) {
+      this.error.handleError<Caixa>('getCaixaById');
+    }
   }
 
 
@@ -88,7 +97,7 @@ export class StoreService {
     return this._httpClient.post<Caixa>(environment.apiManager + 'cashies', caixa)
       .pipe(
         tap((result) => {
-          localStorage.setItem('caixaId',result._id);
+          localStorage.setItem('caixaId', result._id);
           this._caixa.next(result);
           return result;
         }),
@@ -96,8 +105,8 @@ export class StoreService {
       );
   }
 
-  closeCaixaDay(id: string, caixa: Caixa){
-    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/'+ id, caixa)
+  closeCaixaDay(id: string, caixa: Caixa) {
+    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/' + id, caixa)
       .pipe(
         tap((result) => {
           console.log(result);
@@ -115,7 +124,7 @@ export class StoreService {
    */
   addVendaCaixa(venda: any) {
     if (!localStorage.getItem('caixaId')) {
-      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!','Fechar', {
+      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!', 'Fechar', {
         duration: 3000
       });
       catchError(this.error.handleError<Caixa>('AddVendaCaixa'));
@@ -125,7 +134,7 @@ export class StoreService {
           tap((result) => {
             this._caixa.next(result);
 
-            this._snackBar.open('Compra Salva com Sucesso!','Fechar', {
+            this._snackBar.open('Compra Salva com Sucesso!', 'Fechar', {
               duration: 3000
             });
           }),
@@ -134,9 +143,9 @@ export class StoreService {
     }
   }
 
-  createVenda(venda: any){
+  createVenda(venda: any) {
     if (!localStorage.getItem('caixaId')) {
-      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!','Fechar', {
+      this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!', 'Fechar', {
         duration: 3000
       });
       catchError(this.error.handleError<Venda>('createVenda'));

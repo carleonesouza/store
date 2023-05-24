@@ -1,17 +1,21 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { FuseVerticalNavigationAppearance, FuseVerticalNavigationMode, FuseNavigationItem, FuseVerticalNavigationPosition,
-    FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import {
+    FuseVerticalNavigationAppearance, FuseVerticalNavigationMode, FuseNavigationItem, FuseVerticalNavigationPosition,
+    FuseNavigationService, FuseVerticalNavigationComponent
+} from '@fuse/components/navigation';
 import { AuthService } from 'app/core/auth/auth.service';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { PagesService } from './pages.service';
 import { Usuario } from 'app/models/usuario';
+import { Perfil } from 'app/models/perfil';
 
 @Component({
     selector: 'app-page',
     templateUrl: './page.component.html',
+    styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit, OnDestroy {
+export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() appearance: FuseVerticalNavigationAppearance;
     @Input() autoCollapse: boolean;
@@ -23,6 +27,8 @@ export class PageComponent implements OnInit, OnDestroy {
     @Input() position: FuseVerticalNavigationPosition;
     @Input() transparentOverlay: boolean;
     user: Usuario;
+    loginStatus$: Observable<boolean>;
+    isAuth = false;
     private navigationData: FuseNavigationItem[] = [
         {
             id: 'home',
@@ -65,12 +71,12 @@ export class PageComponent implements OnInit, OnDestroy {
             children: [
 
                 {
-                    id:'settings',
+                    id: 'settings',
                     title: 'Configurações',
                     subtitle: '',
-                    type:'collapsable',
-                    icon:'mat_outline:settings',
-                    children:[
+                    type: 'collapsable',
+                    icon: 'mat_outline:settings',
+                    children: [
                         {
                             id: 'account',
                             title: 'Conta',
@@ -108,7 +114,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    private isAuth!: boolean;
+
 
 
     /**
@@ -137,13 +143,26 @@ export class PageComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit() {
+        this.loginStatus$ = this._authService.isLoggedIn$;
+    }
 
-        if (this._authService.check()) {
-            this.isAuth = true;
-            this.user = new Usuario(JSON.parse(localStorage.getItem('user')));
-        } else {
-            this._authService.signOut();
-        }
+    ngAfterViewInit(): void {
+        this.loginStatus$.subscribe((auth) => {
+            if (auth) {
+                this.user = new Usuario(JSON.parse(localStorage.getItem('user')));
+            }
+        });
+
+        //Set menu for specific role
+        this.navigationData.map((item) => {
+            if (this.user) {
+                const profile = new Perfil(this.user.profile);
+                if (profile.role.toLowerCase().localeCompare(String('Admin').toLocaleLowerCase()) === 1 && item.id === 'admin') {
+                    item.hidden = () => true;
+                }
+            }
+
+        });
 
     }
 
@@ -151,9 +170,9 @@ export class PageComponent implements OnInit, OnDestroy {
      * On destroy
      */
     ngOnDestroy(): void {
-
         // Unsubscribe from all subscriptions
-        //this._unsubscribeAll.next();
+        window.location.reload();
+        this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
 
@@ -200,7 +219,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
     }
 
-    profile(): void{
+    profile(): void {
         this._router.navigate(['/profile']);
     }
 

@@ -9,6 +9,7 @@ import { Caixa } from 'app/models/caixa';
 import { StoreService } from '../store.service';
 import * as _moment from 'moment';
 import { MatSort } from '@angular/material/sort';
+import { ApexOptions } from 'ng-apexcharts';
 
 _moment.locale('pt-br');
 
@@ -27,10 +28,12 @@ export class CaixaComponent implements OnInit, OnDestroy {
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     recentTransactionsTableColumns: string[] = ['numero', 'data', 'pagamento', 'total', 'status'];
 
+    accountBalanceOptions: ApexOptions;
     caixas$: Observable<Caixa[]>;
     caixaDay$: Observable<Caixa>;
     caixaYesterday$: Observable<Caixa>;
     zeroValor = 0;
+    ticketMedio=0;
     fechar= false;
     data=[];
     caixas: Caixa[];
@@ -72,6 +75,10 @@ export class CaixaComponent implements OnInit, OnDestroy {
                 this.fechar = true;
             }
             this.data = data.orders;
+
+            this.data.map((vendas) =>{
+                this.ticketMedio = this.ticketMedio + vendas.total;
+            });
             this.recentTransactionsDataSource.data = data.orders;
         });
 
@@ -153,6 +160,7 @@ export class CaixaComponent implements OnInit, OnDestroy {
         }
     }
 
+
     /**
      * Create contact
      */
@@ -172,4 +180,5 @@ export class CaixaComponent implements OnInit, OnDestroy {
     trackByFn(index: number, item: any): any {
         return item.id || index;
     }
+
 }

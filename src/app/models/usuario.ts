@@ -1,4 +1,5 @@
 import { Address } from './address';
+import { Perfil } from './perfil';
 
 export class Usuario {
 
@@ -9,9 +10,9 @@ export class Usuario {
     cpfCnpj: string;
     password: string;
     apiKey: string;
-    status?: any;
-    profile?: string;
     address?: Address;
+    profile?: Perfil;
+    status: boolean;
 
     public constructor(init?: Partial<Usuario>) {
         Object.assign(this, init);

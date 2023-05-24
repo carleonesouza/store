@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Categoria } from 'app/models/categoria';
+import { Usuario } from 'app/models/usuario';
 import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap, catchError, take, switchMap, map, filter } from 'rxjs';
@@ -89,7 +90,8 @@ export class CategoriesService {
 
 
   addCategory(category: Categoria): Observable<any> {
-    return this._httpClient.post(environment.apiManager + 'categories', category)
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.post(environment.apiManager + 'categories/'+_id, category)
       .pipe(
         tap(result => this._category.next(result)),
         catchError(this.error.handleError<any>('addCategory'))

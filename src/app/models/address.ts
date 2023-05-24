@@ -5,7 +5,7 @@ export class Address {
     street: string;
     neighborhood: string;
     zipCode: number;
-    status?: number;
+    status?: boolean;
 
     public constructor(init?: Partial<Address>) {
         Object.assign(this, init);

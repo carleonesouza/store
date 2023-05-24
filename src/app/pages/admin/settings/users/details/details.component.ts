@@ -21,7 +21,7 @@ import { Address } from 'app/models/address';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss']
 })
-export class DetailsComponent implements OnInit, OnDestroy{
+export class DetailsComponent implements OnInit, OnDestroy {
   @Input() userForm: FormGroup;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   displayedColumns: string[] = ['position', 'name'];
@@ -52,8 +52,8 @@ export class DetailsComponent implements OnInit, OnDestroy{
     private _router: Router,
     public _dialog: DialogMessage,
     public dialog: MatDialog) {
-      this.perfis$ = this._perfilService.getAllRoles();
-     }
+    this.perfis$ = this._perfilService.getAllRoles();
+  }
 
   ngOnInit(): void {
     // Open the drawer
@@ -110,6 +110,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
   createUserForm() {
     this.userForm = this._formBuilder.group({
+      _id: new FormControl(''),
       fullName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl(''),
@@ -121,7 +122,8 @@ export class DetailsComponent implements OnInit, OnDestroy{
         street: new FormControl(''),
         zipCode: new FormControl(''),
         neighborhood: new FormControl(''),
-        status: new FormControl(true)}),
+        status: new FormControl(true)
+      }),
       profile: new FormControl(''),
       status: new FormControl(true)
     });
@@ -178,7 +180,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
   }
 
   validateCPF(control: AbstractControl): { [key: string]: any } | null {
-    if(control !== null){
+    if (control !== null) {
       return cpfValida(control);
     }
   }
@@ -191,6 +193,41 @@ export class DetailsComponent implements OnInit, OnDestroy{
     this.editMode = false;
   }
 
+  getUserAdmKey() {
+    if (!localStorage.getItem('user')) {
+      return;
+    }
+    const { apiKey } = new Usuario(JSON.parse(localStorage.getItem('user')));
+
+    return apiKey;
+  }
+
+  removerUser(){
+    if (this.userForm.valid) {
+      const user = new Usuario(this.userForm.value);
+      this.saving = true;
+      user.status = false;
+      user.address.status = false;
+
+      if (user) {
+        this._usersService
+          .removeUser(user._id,user)
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(
+            () => {
+              this.saving = false;
+              this.toggleEditMode(false);
+              this.closeDrawer().then(() => true);
+              this._router.navigate(['/admin/configuracoes/conta/lista']);
+              this._snackBar.open('Usuário Removido com Sucesso', 'Fechar', {
+                duration: 3000
+              });
+              this.userForm.reset();
+            },
+          );
+      }
+    }
+  }
 
 
   onSubmit() {
@@ -198,6 +235,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
       const user = new Usuario(this.userForm.value);
       this.saving = true;
       user.address = new Address(this.userForm.get('address').value);
+      user.apiKey =  this.getUserAdmKey();
       if (user) {
         this._usersService
           .addUser(user)
@@ -208,9 +246,9 @@ export class DetailsComponent implements OnInit, OnDestroy{
               this.toggleEditMode(false);
               this.closeDrawer().then(() => true);
               this._router.navigate(['/admin/configuracoes/conta/lista']);
-               this._snackBar.open('Usuário Salvo com Sucesso','Fechar', {
-              duration: 3000
-            });
+              this._snackBar.open('Usuário Salvo com Sucesso', 'Fechar', {
+                duration: 3000
+              });
               this.userForm.reset();
             },
           );

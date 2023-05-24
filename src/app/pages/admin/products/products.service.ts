@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Produto } from 'app/models/produto';
+import { Usuario } from 'app/models/usuario';
 import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -130,7 +131,8 @@ export class ProductsService {
   }
 
   addProduct(product): Observable<any> {
-    return this._httpClient.post(environment.apiManager + 'products', product)
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.post(environment.apiManager + 'products/'+_id, product)
       .pipe(
         tap(result => this._product.next(result)),
         catchError(this.error.handleError<any>('addProduct'))
