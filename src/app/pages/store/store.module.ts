@@ -56,8 +56,6 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
     NgApexchartsModule,
     FuseFindByKeyPipeModule,
     MaterialAppModule,
-    FuseNavigationModule,
-    FuseFindByKeyPipeModule,
     FuseAlertModule,
     CurrencyMaskModule
   ],

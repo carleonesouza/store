@@ -12,6 +12,12 @@ import { SharedModule } from 'app/shared/shared.module';
 import { AuthSignUpComponent } from 'app/pages/auth/sign-up/sign-up.component';
 import { authSignupRoutes } from 'app/pages/auth/sign-up/sign-up.routing';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { FuseDrawerModule } from '@fuse/components/drawer';
+import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
+import { FuseSplashScreenModule } from '@fuse/services/splash-screen';
+import { MaterialAppModule } from 'material-app.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const maskConfig: Partial<IConfig> = { validation: false};
 
@@ -24,13 +30,20 @@ const maskConfig: Partial<IConfig> = { validation: false};
         NgxMaskModule.forRoot(maskConfig),
         MatButtonModule,
         MatCheckboxModule,
+        ClipboardModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
         MatProgressSpinnerModule,
         FuseCardModule,
         FuseAlertModule,
-        SharedModule
+        SharedModule,
+        FuseDrawerModule,
+        FuseSplashScreenModule,
+        NgApexchartsModule,
+        FuseFindByKeyPipeModule,
+        MaterialAppModule,
+    
     ]
 })
 export class AuthSignUpModule
