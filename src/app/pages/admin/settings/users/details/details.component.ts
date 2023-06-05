@@ -114,7 +114,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       fullName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl(''),
-      cpfCnpj: new FormControl('', [Validators.required, this.validateCPF]),
+      cpf: new FormControl('', [Validators.required, this.validateCPF]),
       apiKey: new FormControl(''),
       password: new FormControl(''),
       confirmPassword: new FormControl(''),

@@ -28,9 +28,9 @@ export class UsersService {
   }
 
   getAllUsers(first = 1, last= 20): Observable<any[]> {
-    const { apiKey } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
 
-    return this._httpClient.get<any[]>(environment.apiManager + 'users/group/'+apiKey )
+    return this._httpClient.get<any[]>(environment.apiManager + 'users/group/'+_id )
       .pipe(
         tap((result) => {
           let users = result;

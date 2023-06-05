@@ -11,9 +11,8 @@
                     ainda, verificar e realizar o controle de estoque de produtos cadastrados e vendidos de sua loja.
                 </p>
                 <p>
-                    Para acesso aos recursos das plataforma é necessário obter um token. Para isso, basta adicionar seu
-                    e-mail abaixo e
-                    receberá um token em seguinda. </p>
+                    Para acesso aos recursos das plataforma é necessário obter um token. Para isso, é preciso realizar
+                    o cadastro de sua loja, além de obter o token através do e-email que será utilizado para acesso a plataforma. </p>
                 <p>
                     Ao receber o token salve-o em um bloco de notas e/ou copie o mesmo, volte a página de cadastro e
                     cole
@@ -23,55 +22,12 @@
             </div>
 
             <div class="flex items-baseline mt-3 text-xl font-semibold pb-5">
-                <div>Já tem uma chave pública ?</div>
+                <div>Obter chave pública ?</div>
                 <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Cadastrar
                 </a>
             </div>
 
 
-            <!-- Alert -->
-            <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
-                [type]="alert.type" [@shake]="alert.type === 'error'">
-                {{alert.message}}
-            </fuse-alert>
-            <div class="flex mt-5 md:mb-9 sm:m-3">
-
-                <form class="w-full" [formGroup]="signatureForm">
-                    <!-- Email field -->
-                    <mat-form-field class="w-full">
-                        <mat-label>E-mail</mat-label>
-                        <input id="email" matInput [formControlName]="'email'" />
-                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:mail'"></mat-icon>
-                        <mat-error *ngIf="signatureForm.get('email').hasError('required')">
-                            Email é obrigatório
-                        </mat-error>
-                        <mat-error *ngIf="signatureForm.get('email').hasError('email')">
-                            Por favor digite um e-mail válido
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field class="w-full" [ngClass]="'apikey'">
-                        <mat-label>Api Key</mat-label>
-                        <input id="apikey" matInput [formControlName]="'apikey'" disabled />
-                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
-                        <button mat-button matSuffix mat-flat-button [cdkCopyToClipboard]="apiToken"
-                            class="rounded-none" matTooltip="Copiar" aria-label="copy">
-                            <mat-icon>content_copy</mat-icon>
-                        </button>
-                    </mat-form-field>
-
-
-                    <!-- Submit button -->
-                    <button class="fuse-mat-button-medium w-50 mt-6" mat-flat-button [color]="'primary'"
-                        [disabled]="signatureForm.invalid" (click)="obterKey()">
-                        <span *ngIf="!signatureForm.invalid">
-                            Obter chave pública
-                        </span>
-                        <mat-progress-spinner class="ml-2 mr-3" *ngIf="loading" [diameter]="24"
-                            [mode]="'indeterminate'"></mat-progress-spinner>
-                    </button>
-                </form>
-
-            </div>
+            
         </div>
     </div>

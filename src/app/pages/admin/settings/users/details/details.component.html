@@ -119,7 +119,7 @@
                                             class="flex items-center leading-6 w-full p-3 border-4 border-light-blue-500 border-opacity-75 rounded-lg">
                                             <mat-icon class="mr-2"
                                                 [svgIcon]="'heroicons_outline:identification'"></mat-icon>
-                                            <div class="font-mono">{{user.cpfCnpj | mask:'000.000.000-00' }}</div>
+                                            <div class="font-mono">{{user.cpf | mask:'000.000.000-00' }}</div>
                                         </div>
                                     </ng-container>
                                 </div>
@@ -144,7 +144,7 @@
                                         <div class="ml-4 md:ml-2">{{user.address.street}}</div>
                                         <div><span class="font-bold">CEP: </span>{{user.address.zipCode |
                                             mask:'00.000-000'}}</div>
-                                        <div><span class="font-bold">Bairro: </span>{{user.address.neighborhood}}</div>
+                                        <div><span class="font-bold">Bai./Cid./Est.: </span>{{user.address.neighborhood}}</div>
 
                                     </div>
                                 </ng-container>
@@ -225,10 +225,10 @@
                             <div class="flex-auto mr-2 w-full">
                                 <mat-form-field appearance="fill" class="w-full">
                                     <mat-label>CPF</mat-label>
-                                    <input formControlName="cpfCnpj" matInput [placeholder]="'Número do CPF'"
+                                    <input formControlName="cpf" matInput [placeholder]="'Número do CPF'"
                                         [spellcheck]="false" mask="000.000.000-00" />
                                     <mat-error
-                                        *ngIf="userForm?.get('cpfCnpj').hasError('valido') && (userControlsForm.cpfCnpj.touched || userControlsForm.cpfCnpj.dirty)"
+                                        *ngIf="userForm?.get('cpf').hasError('valido') && (userControlsForm.cpf.touched || userControlsForm.cpf.dirty)"
                                         class="cross-validation-error-message alert">
                                         CPF Inválido!
                                     </mat-error>
@@ -289,7 +289,7 @@
                                             </div>
                                             <div class="mt-6">
                                                 <mat-form-field class="w-full">
-                                                    <mat-label>Bairro</mat-label>
+                                                    <mat-label>Bairro/Cidade/Estado</mat-label>
                                                     <mat-icon matPrefix class="hidden sm:flex icon-size-5"
                                                         [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
                                                     <input matInput formControlName="neighborhood" [placeholder]="'Bairro'">

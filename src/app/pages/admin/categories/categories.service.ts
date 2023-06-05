@@ -26,10 +26,9 @@ export class CategoriesService {
   }
 
 
-  getAllCategories(page = 0, size = 10) {
-    return this._httpClient.get<any[]>(environment.apiManager + 'categories', {params:{
-      page, size
-    }})
+  getAllCategories() {
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.get<any[]>(environment.apiManager + 'categories/all/'+_id)
       .pipe(
         tap((result) => {
           let categories = result;

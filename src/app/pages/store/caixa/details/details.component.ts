@@ -199,10 +199,11 @@ export class CaixaDetailsComponent implements OnInit, OnDestroy {
             caixa.criadoEm = this.caixaForm.get('criadoEm').value;
             caixa.fechadoEm = this.caixaForm.get('fechadoEm').value;
             caixa.status = false;
-            delete caixa._id;
+            caixa._id = caixaID;
+           
             this.closeDrawer().then(() => true);
             this._storeService
-                .closeCaixaDay(caixaID, caixa)
+                .closeCaixaDay(caixa)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe(
                     () => {

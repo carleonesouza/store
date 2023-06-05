@@ -179,26 +179,36 @@
                             Por favor digite um e-mail válido
                         </mat-error>
                     </mat-form-field>
-
-
                     <div class="flex">
+                    <mat-form-field class="w-full" appearance="outline">
+                        <mat-label>Senha</mat-label>
+                        <input id="password" matInput formControlName="password" />
+                        <mat-icon class="icon-size-5 mr-2" matPrefix [svgIcon]="'heroicons_solid:key'"></mat-icon>
+                        <mat-error *ngIf="user.controls.password?.hasError('required')">
+                            Senha é obrigatório
+                        </mat-error>
+                        
+                    </mat-form-field>
+                    </div>
+
+                    <!-- <div class="flex">
                         <mat-form-field class="w-full" appearance="outline">
                             <mat-label>Senha</mat-label>
-                            <input id="password" matInput type="password" formControlName="password" #passwordField />
+                            <input id="password" matInput type="password" formControlName="password" #passwordField/>
                             <mat-icon class="icon-size-5 mr-2" matPrefix [svgIcon]="'heroicons_solid:key'"></mat-icon>
                             <button mat-icon-button type="button" (click)="
             passwordField.type === 'password'
                 ? (passwordField.type = 'text')
                 : (passwordField.type = 'password')
         " matSuffix>
-                                <mat-icon class="icon-size-5 mr-2" *ngIf="passwordField.type === 'password'"
+                                <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
                                     [svgIcon]="'heroicons_solid:eye'"></mat-icon>
                                 <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
                                     [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                             </button>
                             <mat-error> Senha é obrigatório </mat-error>
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
 
                     <div class="inline-flex items-end w-full mt-1.5 pt-4">

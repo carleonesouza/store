@@ -65,7 +65,7 @@ export class AuthSignUpComponent implements OnInit, AfterViewInit {
                 phone: ['', [Validators.required]],
                 email: ['', [Validators.required, Validators.email]],
                 apiKey: [''],
-                password: ['', Validators.required],
+                password: [{ value: '', disabled: false }, [Validators.required]],
                 agreements: ['', Validators.required],
             }),
             signature: this._formBuilder.group({

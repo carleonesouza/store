@@ -7,6 +7,7 @@ import { HandleError } from 'app/utils/handleErrors';
 import { environment } from 'environments/environment';
 import { Venda } from 'app/models/vendas';
 import * as _moment from 'moment';
+import { Usuario } from 'app/models/usuario';
 _moment.locale('pt-br');
 
 @Injectable({
@@ -94,7 +95,8 @@ export class StoreService {
    * @returns Caixa
    */
   addCaixaDay(caixa): Observable<Caixa> {
-    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies', caixa)
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.post<Caixa>(environment.apiManager + 'cashies/'+_id, caixa)
       .pipe(
         tap((result) => {
           localStorage.setItem('caixaId', result._id);
@@ -105,8 +107,9 @@ export class StoreService {
       );
   }
 
-  closeCaixaDay(id: string, caixa: Caixa) {
-    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/' + id, caixa)
+  closeCaixaDay(caixa: Caixa) {
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.put<Caixa>(environment.apiManager + 'cashies/close/' + _id, caixa)
       .pipe(
         tap((result) => {
           console.log(result);
@@ -144,13 +147,14 @@ export class StoreService {
   }
 
   createVenda(venda: any) {
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
     if (!localStorage.getItem('caixaId')) {
       this._snackBar.open('Não existe caixa aberto para o dia, Favor abrir caixa antes de realizar a venda!', 'Fechar', {
         duration: 3000
       });
       catchError(this.error.handleError<Venda>('createVenda'));
     } else {
-      return this._httpClient.post<Venda>(environment.apiManager + 'orders', venda)
+      return this._httpClient.post<Venda>(environment.apiManager + 'orders/'+_id, venda)
         .pipe(
           tap((result) => {
             this._caixa.next(result);

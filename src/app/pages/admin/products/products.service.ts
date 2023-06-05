@@ -41,7 +41,8 @@ export class ProductsService {
 
 
   getAllProducts(page = 0, size = 10) {
-    return this._httpClient.get<any[]>(environment.apiManager + 'products', {params:{
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.get<any[]>(environment.apiManager + 'products/all/'+_id, {params:{
       page, size
     }})
       .pipe(
@@ -67,7 +68,8 @@ export class ProductsService {
 
 
   getCategories(){
-    return this._httpClient.get<any[]>(environment.apiManager + 'categories')
+    const { _id } = new Usuario(JSON.parse(localStorage.getItem('user')));
+    return this._httpClient.get<any[]>(environment.apiManager + 'categories/all/'+_id)
       .pipe(
         tap((result) => {
           let categories = result;

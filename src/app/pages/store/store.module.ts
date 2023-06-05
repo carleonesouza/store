@@ -10,6 +10,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { MaterialAppModule } from 'material-app.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import {MatTableModule} from '@angular/material/table';
 import { StoreComponent } from './store.component';
 import { VendasComponent } from './vendas/vendas.component';
 import { CaixaComponent } from './caixa/caixa.component';
@@ -23,7 +24,8 @@ import { FuseDrawerModule } from '@fuse/components/drawer';
 import { AuthInterceptor } from 'app/core/auth/auth.interceptor';
 import { StoreResolver } from './store.resolve';
 import { MatSnackBarComponent } from 'app/shared/mat-snack-bar/mat-snack-bar.component';
-import { ReportsComponent } from '../reports/reports.component';
+import { ReportsComponent } from './reports/reports.component';
+import { CdkTableModule } from '@angular/cdk/table';
 
 
 export const customCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -49,9 +51,11 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
     CommonModule,
     FuseNavigationModule,
     StoreRoutingModule,
+    CdkTableModule,
     SharedModule,
     FuseDrawerModule,
     FuseCardModule,
+    MatTableModule,
     FuseSplashScreenModule,
     NgApexchartsModule,
     FuseFindByKeyPipeModule,

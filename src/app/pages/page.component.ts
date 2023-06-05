@@ -144,9 +144,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     ngOnInit() {
         this.loginStatus$ = this._authService.isLoggedIn$;
-    }
 
-    ngAfterViewInit(): void {
         this.loginStatus$.subscribe((auth) => {
             if (auth) {
                 this.user = new Usuario(JSON.parse(localStorage.getItem('user')));
@@ -157,12 +155,16 @@ export class PageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.navigationData.map((item) => {
             if (this.user) {
                 const profile = new Perfil(this.user.profile);
-                if (profile.role.toLowerCase().localeCompare(String('Admin').toLocaleLowerCase()) === 1 && item.id === 'admin') {
+                if (profile.role.toLowerCase().localeCompare(String('Admin').toLowerCase()) === 1 && item.id === 'admin') {
                     item.hidden = () => true;
                 }
             }
 
         });
+    }
+
+    ngAfterViewInit(): void {
+       
 
     }
 
