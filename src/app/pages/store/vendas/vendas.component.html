@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-auto min-w-0 p-5">
+<div class="flex flex-col flex-auto min-w-0 p-5 md:overflow-auto sm:overflow-x-auto">
 
     <!-- Header -->
     <div class="bg-card rounded">
@@ -36,7 +36,7 @@
             <ng-container *ngIf="products$ | async as products">
                 <ng-container *ngIf="products.length ; else noListas">
                     <ng-container>
-                        <div class="keen-slider w-auto" #sliderRef>
+                        <div class="keen-slider w-full" #sliderRef>
                             <ng-container *ngFor="let product of products; let i = index; trackBy: trackByFn">
 
                                 <fuse-card class="flex flex-col md:flex-row w-full filter-shopping keen-slider__slide">
@@ -156,17 +156,18 @@
             </div>
         </mat-step>
 
-        <mat-step>
+        <mat-step  class="w-full">
             <ng-template matStepLabel>Finalizar Venda</ng-template>
 
-            <div class="inset-0 min-w-0 text-center flex-col">
+            <div class="inset-0 min-w-0 text-center flex-col md:overflow-auto sm:overflow-x-auto">
 
                 <!-- Main -->
-                <div class="inline-block p-6 sm:p-10 text-left print:p-0 overflow-x-auto ">
+                <div class="inline-block p-6 sm:p-10 text-left print:p-0 overflow-x-auto">
 
                     <!-- Invoice -->
                     <div
-                        class="md:w-auto sm:w-auto flex-col w-240 min-w-240 p-16 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
+                        class="md:w-auto sm:w-auto
+                        md:overflow-auto sm:overflow-x-auto flex-col w-240 min-w-240 p-16 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
 
                         <div class="flex items-start">
                             <div class="grid grid-rows-2 place-items-start gap-y-12">
@@ -174,14 +175,7 @@
                                     <div class="place-self-center w-24">
                                         <img class="w-24" src="assets/images/logo/logo.svg">
                                     </div>
-                                    <!-- <div class="pl-10 border-l text-md">
-                                        <div class="font-medium">Fuse Inc.</div>
-                                        <div>2810 Country Club Road</div>
-                                        <div>Cranford, NJ 07016</div>
-                                        <div>+66 123 455 87</div>
-                                        <div>hello@fuseinc.com</div>
-                                        <div>www.fuseinc.com</div>
-                                    </div> -->
+                                    
                                 </div>
                                 <div class="grid auto-cols-max grid-flow-col gap-x-8">
                                     <div class="place-self-center w-24 text-center text-2xl text-secondary">
@@ -189,9 +183,7 @@
                                     </div>
                                     <div class="pl-10 border-l text-md">
                                         <div class="font-medium">{{venda?.user.name}}</div>
-                                        <!-- <div>9301 Wood Street</div>
-                                        <div>Philadelphia, PA 19111</div>
-                                        <div>+55 552 455 87</div> -->
+                                       
                                         <div>{{venda?.user.email}}</div>
                                     </div>
                                 </div>
