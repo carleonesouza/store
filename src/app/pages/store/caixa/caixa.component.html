@@ -243,8 +243,10 @@
                                     <div class="flex flex-col mx-6 my-3">
                                         <div class="text-sm font-medium leading-none text-secondary">Total</div>
                                         <ng-container *ngIf="caixaYesterday.valorFechamento > 0; else noValor">
-                                            <div class="mt-2 font-medium text-3xl leading-none">{{ caixaYesterday.valorAbertura > caixaYesterday.valorFechamento ? caixaYesterday.valorFechamento :  caixaYesterday.valorFechamento - caixaYesterday.valorAbertura |
-                                                currency:'BRL'}}</div>
+                                            <div class="mt-2 font-medium text-3xl leading-none">
+                                                <ng-container *ngIf="caixaYesterday.valorAbertura > caixaYesterday.valorFechamento ; else valorDiff">{{ caixaYesterday.valorFechamento |currency:'BRL'}}</ng-container>
+                                                <ng-template #valorDiff>{{ caixaYesterday.valorFechamento - caixaYesterday.valorAbertura |currency:'BRL' }}</ng-template>    
+                                            </div>
                                         </ng-container>
                                     </div>
 

@@ -1,3 +1,4 @@
+import { Cesta } from './cesta';
 import { Produto } from './produto';
 import { Usuario } from './usuario';
 
@@ -5,6 +6,7 @@ export class Venda {
 
     _id: string;
     produtos: Array<Produto>;
+    cestas?: Array<Cesta>;
     nvenda: number;
     total: number;
     formaPagamnto: string;
