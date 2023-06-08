@@ -4,8 +4,8 @@
 
 export const environment = {
     production: true,
-    apiManager: 'http://localhost:8080/v1/api/',
-    apiDocs: 'http://localhost:8080/'
+    apiManager: 'https://app-loja-backend.onrender.com/v1/api/',
+    apiDocs: 'https://app-loja-backend.onrender.com/'
 };
 
 /*

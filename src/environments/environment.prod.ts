@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    apiManager: 'https://app-loja.azurewebsites.net/v1/api/'
+    apiManager: 'https://app-loja-backend.onrender.com/v1/api/',
+    apiDocs: 'https://app-loja-backend.onrender.com/'
 };
