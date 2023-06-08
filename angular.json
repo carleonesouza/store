@@ -58,8 +58,7 @@
                             "src/styles/vendors.scss",
                             "src/@fuse/styles/main.scss",
                             "src/styles/styles.scss",
-                            "src/styles/tailwind.scss",
-                            "./node_modules/swagger-ui/dist/swagger-ui.css"
+                            "src/styles/tailwind.scss"
                         ],
                         "scripts": []
                     },
