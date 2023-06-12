@@ -6,7 +6,6 @@ import SwaggerUI from 'swagger-ui';
 @Component({
     selector       : 'docs',
     templateUrl    : './docs.component.html',
-    styleUrls      : ['./docs.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocsComponent implements OnInit, OnDestroy{
